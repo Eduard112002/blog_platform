@@ -1,27 +1,35 @@
 import React from 'react';
 import './articles.css';
+import { format } from 'date-fns';
 
-const Articles = ({ article }) => {
-    console.log(article);
-   return <div className='article'>
-       <div className="article_content">
+const Articles = ({ articles }) => {
+    const tag = tegList(articles.tagList);
+    const [year, month, day] = articles.createdAt.slice(0, 10).split('-');
+    const newData = format(new Date(year, month - 1, day), 'LLLL dd, yyyy');
+   return <div className="articles">
+       <div className="articles_content">
            <div>
-               <span className="article_title">Some article title</span>
-               <span className="article_like">12</span>
+               <span className="articles_title">{articles.slug}</span>
+               <span className="articles_like">{articles.favoritesCount}</span>
            </div>
-           <span className="article_tag">Tag1</span>
-           <p className="article_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-               aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris  nisi ut aliquip ex ea commodo consequat.
-           </p>
+               {tag}
+               <p className="articles_text">{articles.title}</p>
        </div>
-       <div className="article_user">
-           <div className="article_user_info">
-               <h3 className="article_user_info__name">John Doe</h3>
-               <span className="article_user_info__date">March 5, 2020 </span>
+       <div className="articles_user">
+           <div className="articles_user_info">
+               <h4 className="articles_user_info__name">{articles.author.username}</h4>
+               <span className="articles_user_info__date">{newData}</span>
            </div>
-           <span className="article_user_info__icon"></span>
+           <img className="articles_user_info__icon" src={articles.author.image} alt="author_icon"/>
        </div>
    </div>
 }
 
+const tegList = (arr) => {
+    return arr.map((el, index) => {
+        if (index < 3) {
+            return <span className="articles_tag" key={index}>{el.length < 20 ? el : el.slice(0, 20) + '...'}</span>
+        }
+    });
+}
 export default Articles;

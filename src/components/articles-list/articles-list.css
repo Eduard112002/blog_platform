@@ -1,5 +1,4 @@
 .articles_list{
-    padding-top: 50px;
     width: 50%;
     margin-right: auto;
     margin-left: auto;
@@ -7,4 +6,25 @@
 
 .link{
     text-decoration: none;
+}
+
+:where(.css-dev-only-do-not-override-amq5gd).ant-modal {
+    width: 270px !important;
+}
+@media (min-width: 720px) {
+    :where(.css-dev-only-do-not-override-amq5gd)[class^="ant-modal"], :where(.css-dev-only-do-not-override-amq5gd)[class*=" ant-modal"] {
+        display: none;
+    }
+}
+
+.spin{
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+    height: 100px;
+}
+
+.error{
+    display: flex;
+    justify-content: center;
 }

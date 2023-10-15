@@ -1,7 +1,28 @@
 import { Pagination } from 'antd';
+import Server from '../server';
+import { addPage } from '../../actions';
+import { connect } from 'react-redux';
+import store from '../../store';
 
-const PaginatioArticles = () => {
-    return <Pagination defaultCurrent={1} total={50} />
+const PaginatioArticles = ({ page }) => {
+    const server = new Server();
+    const { dispatch } = store;
+    const onChange = (page) => {
+        server.getArticleList(page);
+        dispatch(addPage(page));
+    };
+    return (
+        <div className="pagination">
+            <Pagination defaultCurrent={page} onChange={onChange} total={50} />
+        </div>
+    );
 }
 
-export default PaginatioArticles;
+const mapStateToProps = (state) => {
+    const articles = state.addArticlesReducer;
+    return {
+        page: articles.page,
+    };
+};
+
+export default connect(mapStateToProps)(PaginatioArticles);
