@@ -61,7 +61,7 @@ const Article = ({ articlesList, loading, error }) => {
 
 const tegList = (arr) => {
     return arr.map((el, index) => {
-        if (index < 3) {
+        if (index < 3 && el.trim().length) {
             return <span className="article_tag" key={index}>{el.length < 30 ? el : el.slice(0, 30) + '...'}</span>
         }
     });

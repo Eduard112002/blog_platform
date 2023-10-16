@@ -31,7 +31,7 @@ const ArticlesList = ({ articlesList, loading, error }) => {
         )
     }
     const articleEl = articlesList.map((el) => {
-        return <Link to={`/article/${el.id}`} className="link" key={el.id}><Articles articles={el}/></Link>
+        return <Link to={`/articles/${el.id}`} className="link" key={el.id}><Articles articles={el}/></Link>
     });
     return <div className="articles_list">
         {articleEl}

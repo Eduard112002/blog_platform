@@ -9,6 +9,8 @@ import Server from './components/server';
 import Header from './components/header';
 import ArticlesList from './components/articles-list';
 import Article from './components/article';
+import CreateAccount from './components/сreate-account';
+import SignInAccount from './components/sign-in-account';
 
 const App = () => {
     const server = new Server();
@@ -21,7 +23,9 @@ const App = () => {
            <Routes>
                <Route path="/" element={<ArticlesList />} />
                <Route path="/article" element={<Article />} />
-               <Route path="/article/:id" element={<Article />}></Route>
+               <Route path="/articles/:id" element={<Article />}></Route>
+               <Route path="/singUp" element={<CreateAccount />}></Route>
+               <Route path="/singIn" element={<SignInAccount />}></Route>
                <Route path="*" element={<ArticlesList />} />
            </Routes>
        </Provider>

@@ -1,11 +1,11 @@
-const defaultStateTickets = {
+const defaultStateArticles= {
     articlesList: [],
     loading: true,
     error: false,
     page: 1,
 }
 
-const addArticlesReducer = (state = defaultStateTickets, action) => {
+const addArticlesReducer = (state = defaultStateArticles, action) => {
     switch(action.type) {
         case 'ADD_ARTICLES':
             return {...state, loading: false, articlesList: [...action.articlesArr]};

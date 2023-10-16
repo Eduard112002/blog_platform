@@ -4,7 +4,7 @@
     width: 70%;
     margin-right: auto;
     margin-left: auto;
-    padding-top: 30px;
+    padding-top: 20px;
     font-family: 'Open Sans', sans-serif;
     margin-bottom: 50px;
 }
@@ -13,6 +13,7 @@
     text-decoration: none;
     color: #000;
     cursor: pointer;
+    padding-top: 10px;
 }
 
 .head_title{
@@ -21,23 +22,31 @@
 }
 
 .head_but{
+    display: inline-block;
     font-size: 18px;
     cursor: pointer;
     width: 110px;
     height: 50px;
+    text-decoration: none;
 }
 
 .entrance{
     margin-right: 20px;
-    border: none;
+    color: #000000;
+    border: 1px solid initial;
+    display: inline-block;
+    padding: 10px;
 }
 
 .log-in{
     border: 1px solid rgba(88, 232, 2, 0.88);
+    display: inline-block;
+    padding: 10px;
     border-radius: 4px;
     color: rgba(81, 213, 0, 0.88);
 }
 
 .log-in:active{
-    border: 2px solid rgba(88, 232, 2, 0.88);
+    box-shadow: 0 0 2px 2px rgba(88, 232, 2, 0.88) inset;
 }
+

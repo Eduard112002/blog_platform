@@ -27,7 +27,7 @@ const Articles = ({ articles }) => {
 
 const tegList = (arr) => {
     return arr.map((el, index) => {
-        if (index < 3) {
+        if (index < 3 && el.trim().length) {
             return <span className="articles_tag" key={index}>{el.length < 20 ? el : el.slice(0, 20) + '...'}</span>
         }
     });
