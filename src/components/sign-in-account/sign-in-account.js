@@ -14,6 +14,7 @@ const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, ema
       if (token) {
           addSignInEmail('')
           addSignInPassword('')
+          return navigate("/");
       }
     }, [token])
     const signIn = () => {
@@ -26,7 +27,6 @@ const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, ema
         if (emailInvalid && password.length) {
             server.userSignIn(email, password);
             addEyePassword(true)
-            return navigate("/");
         } else {
             addEmailInvalid(true)
         }

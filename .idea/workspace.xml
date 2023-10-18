@@ -4,19 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="26b1f0c7-0452-4705-9b50-afa926c19ff9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/article/article.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/article/article.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/server/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sign-in-account/sign-in-account.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sign-in-account/sign-in-account.css" afterDir="false" />
+    <list default="true" id="26b1f0c7-0452-4705-9b50-afa926c19ff9" name="Changes" comment="Промежуточный результат 1.2. (функционал запросов)">
+      <change afterPath="$PROJECT_DIR$/src/img/eye.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/img/not-eye.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/reducer/add-user-sign-in.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/sign-in-account/sign-in-account.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sign-in-account/sign-in-account.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/сreate-account/сreate-account.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/сreate-account/сreate-account.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/сreate-account/сreate-account.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/сreate-account/сreate-account.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducer/add-articles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/reducer/add-articles.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducer/add-new-account.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/reducer/add-new-account.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +67,7 @@
       <workItem from="1697440170634" duration="20345000" />
       <workItem from="1697526093432" duration="6772000" />
       <workItem from="1697624657404" duration="19000" />
-      <workItem from="1697629495568" duration="19033000" />
+      <workItem from="1697629495568" duration="19332000" />
     </task>
     <task id="LOCAL-00001" summary="new">
       <created>1697283615932</created>
@@ -105,7 +97,14 @@
       <option name="project" value="LOCAL" />
       <updated>1697475584777</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Промежуточный результат 1.2. (функционал запросов)">
+      <created>1697657508648</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1697657508648</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -127,6 +126,7 @@
     <MESSAGE value="Промежуточный результат 1.0. (функционал, начальной страницы)." />
     <MESSAGE value="доп.файлы" />
     <MESSAGE value="Промежуточный результат 1.1. (страницы регистрации и входа)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Промежуточный результат 1.1. (страницы регистрации и входа)" />
+    <MESSAGE value="Промежуточный результат 1.2. (функционал запросов)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Промежуточный результат 1.2. (функционал запросов)" />
   </component>
 </project>
