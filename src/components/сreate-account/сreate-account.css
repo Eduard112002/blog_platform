@@ -19,6 +19,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
+    position: relative;
 }
 
 .title_form{
@@ -84,3 +85,21 @@ input::placeholder{
     font-size: 14px;
     color: #ff000e;
 }
+
+.eye_password {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 10px;
+    border: none;
+    padding: 0;
+}
+
+.eye_password[type=text] {
+    background: url("../../img/eye.svg") no-repeat center;
+}
+
+.eye_password[type=password] {
+    background: url("../../img/not-eye.svg") no-repeat center;
+}
+
