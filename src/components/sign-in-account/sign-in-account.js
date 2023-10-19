@@ -1,34 +1,26 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate  } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import './sign-in-account.css';
 import Server from '../server';
 import {bindActionCreators} from "redux";
 import * as actions from "../../actions";
 import { connect } from 'react-redux';
 
-const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, emailInvalid, addEmailInvalid, token, addEyePassword, eyePassword }) => {
+const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, emailInvalid, addEmailInvalid, addEyePassword, eyePassword }) => {
     const server = new Server();
     const errors = emailInvalid ? <span className="title_error">Email or password is invalid.</span> : null;
-    let navigate = useNavigate();
-    useEffect(() => {
-      if (token) {
-          addSignInEmail('')
-          addSignInPassword('')
-          return navigate("/");
-      }
-    }, [token])
     const signIn = () => {
         const emailArr = email.split('');
-        emailArr.some((el, index) => {
+        const newArr = emailArr.some((el, index) => {
             if (el ==='@' && index !== emailArr.length - 1) {
                 addEmailInvalid(true)
+                return true;
             }
         });
-        if (emailInvalid && password.length) {
+        if (newArr && password.length) {
             server.userSignIn(email, password);
-            addEyePassword(true)
-        } else {
-            addEmailInvalid(true)
+            addEyePassword(true);
+            addEmailInvalid(false)
         }
     }
     return <div className="sign-in">
@@ -78,7 +70,7 @@ const mapStateToProps = (state) => {
         email: signIn.email,
         password: signIn.password,
         error: articles.error,
-        token: articles.token,
+        userInfo: articles.userInfo,
         emailInvalid: articles.emailInvalid,
         eyePassword: articles.eyePassword,
     }

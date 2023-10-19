@@ -1,42 +1,34 @@
 import React from 'react';
 import './сreate-account.css';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import Server from '../server';
+import { useForm } from 'react-hook-form';
 
-const CreateAccount = ({ userName, email, password, passwordRepeat, errorPassword, errorPasswordRepeat,
-                           addUserName, addEmail, addPassword, addPasswordRepeat, addErrorPassword, addErrorPasswordRepeat,
+const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName, addEmail, addPassword, addPasswordRepeat,
                            addTypePassword, addTypePasswordRepeat, typePassword, typePasswordRepeat, addChecked, checked}) => {
     const server = new Server();
-    const error = errorPassword ? <span className="title_error">Your password needs to be at least 6 characters.</span> : null;
-    const errorRepeat = errorPasswordRepeat ? <span className="title_error">Passwords must match</span> : null;
-    const logIn = () => {
-        const emailArr = email.split('');
-        const newEmail = emailArr.some((el, index) => {
-            if (el ==='@' && index !== emailArr.length - 1) {
-                return true
-            }
-        });
-         if (password.length < 6) {
-             addErrorPassword(true);
-         } else {
-             addErrorPassword(false);
-         }
-         if (passwordRepeat !== password) {
-             addErrorPasswordRepeat(true)
-         } else {
-             addErrorPasswordRepeat(false);
-         }
-         if (userName.length && newEmail && checked && passwordRepeat === password && password.length > 6 && password.length < 41) {
-             server.registerNewUser(userName, email, password);
-             addUserName('');
-             addEmail('');
-             addPassword('');
-             addPasswordRepeat('');
-             addChecked(false);
-         }
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            userName: '',
+            email: '',
+            password: '',
+            passwordRepeat: '',
+            checkbox: false,
+        }
+    });
+    let navigate = useNavigate();
+    const logIn = (data) => {
+         const { userName, email, password} = data;
+         server.registerNewUser(userName, email, password);
+         addUserName('');
+         addEmail('');
+         addPassword('');
+         addPasswordRepeat('');
+         addChecked(false);
+         return navigate("/");
     }
     return <div className="create">
         <form className="create_form" onSubmit={(e) => e.preventDefault()}>
@@ -44,11 +36,48 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, errorPasswor
             <div className="container_from">
                 <label className="title_form">Username</label>
                 <input
-                    className="input_form" type="text" placeholder="Username" value={userName} onChange={(e) => addUserName(e.target.value)} autoFocus required/>
+                    className="input_form"
+                    type="text"
+                    {...register("userName", {required: {
+                        value: true,
+                        message: 'The input field must be filled in.',
+                        }, minLength: {
+                        value: 3,
+                        message: 'Your name needs to be at least 3 characters.'
+                        },
+                    maxLength: {
+                        value: 20,
+                        message: 'Your name must contain no more than 20 characters.'
+                    }})}
+                    placeholder="Username"
+                    value={userName}
+                    onChange={(e) => addUserName(e.target.value)}
+                    style={errors.userName?.message ? {border: '1px solid #ff000e'} : null}
+                    autoFocus
+                />
+                <span className="title_error">{errors.userName?.message}</span>
             </div>
             <div className="container_from">
                 <label className="title_form">Email address</label>
-                <input className="input_form" type="email" placeholder="Email address" value={email} onChange={(e) => addEmail(e.target.value)} required/>
+                <input
+                    className="input_form"
+                    type="email"
+                    {...register("email",{
+                        required: {
+                            value: true,
+                            message: 'The input field must be filled in.',
+                        },
+                        pattern: {
+                            value: /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu,
+                            message: 'Invalid email address.'
+                        },
+                    })}
+                    placeholder="Email address"
+                    value={email}
+                    style={errors.email?.message ? {border: '1px solid #ff000e'} : null}
+                    onChange={(e) => addEmail(e.target.value)}
+                    required/>
+                <span className="title_error">{errors.email?.message}</span>
             </div>
             <div className="container_from">
                 <label className="title_form">Password</label>
@@ -56,18 +85,28 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, errorPasswor
                     value={password}
                     className="input_form"
                     type={typePassword ? "password" : "text"}
+                    {...register("password", {required: {
+                            value: true,
+                            message: 'The input field must be filled in.',
+                        }, minLength:{
+                       value: 6,
+                       message: 'Your password needs to be at least 6 characters.',
+                        }, maxLength: {
+                            value: 40,
+                            message: 'Your password must contain no more than 40 characters.'
+                        }})}
                     placeholder="Password"
-                    style={errorPassword !== false ? {border: '1px solid #ff000e'} : null}
+                    style={errors.password?.message ? {border: '1px solid #ff000e'} : null}
                     onChange={(e) => addPassword(e.target.value)}
                     required
                 />
                 <button
                     className="eye_password"
                     type={typePassword ? "password" : "text"}
-                    style={errorPassword ? {top: '45%'} : {top: '55%'}}
+                    style={errors.password?.message ? {top: '43%'} : {top: '55%'}}
                     onClick={() => addTypePassword(!typePassword)}
                 ></button>
-                {error}
+                <span className="title_error">{errors.password?.message}</span>
             </div>
             <div className="container_from password">
                 <label className="title_form">Repeat Password</label>
@@ -75,26 +114,51 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, errorPasswor
                     value={passwordRepeat}
                     className="input_form"
                     type={typePasswordRepeat ? "password" : "text"}
+                    {...register("passwordRepeat", {required: {
+                            value: true,
+                            message: 'The input field must be filled in.',
+                        },
+                        validate: (value) => {
+                        if (value === password) {
+                            return true;
+                        } else {
+                            return 'Passwords must match';
+                        }
+                        },
+                    }
+                    )}
                     placeholder="Password"
-                    style={errorPasswordRepeat !== false ? {border: '1px solid #ff000e'} : null}
+                    style={errors.passwordRepeat?.message ? {border: '1px solid #ff000e'} : null}
                     onChange={(e) => addPasswordRepeat(e.target.value)}
                     required
                 />
                 <button
                     className="eye_password"
                     type={typePasswordRepeat ? "password" : "text"}
-                    style={errorPasswordRepeat ? {top: '45%'} : {top: '55%'}}
+                    style={errors.passwordRepeat?.message ? {top: '43%'} : {top: '55%'}}
                     onClick={() => addTypePasswordRepeat(!typePasswordRepeat)}
                 ></button>
-                {errorRepeat}
+                <span className="title_error">{errors.passwordRepeat?.message}</span>
             </div>
             <div className="container_form__checked">
-                <input type="checkbox" className="form_checked" required onChange={(e) => addChecked(e.target.checked)} checked={checked}/>
-                <label className="title_form checked">
+                <input
+                    type="checkbox"
+                    className="form_checked"
+                    required
+                    checked={checked}
+                    {...register("checkbox", {required: {
+                        value: true,
+                        message: 'the checkbox should be checked',
+                        },
+                        validate: (value) => value === checked,
+                        onChange: (e) => addChecked(e.target.checked),
+                    })}
+                />
+                <label className="title_form checked" style={errors.checkbox?.message ? {color: '#ff000e'} : null}>
                     I agree to the processing of my personal information
                 </label>
             </div>
-            <button className="create_log-in" onClick={logIn}>Create</button>
+            <button className="create_log-in" onClick={handleSubmit((data) => logIn(data))}>Create</button>
             <div>
                 <center className="login-account">Already have an account?<Link to='/singIn' className="login-account_link"> Sign In.</Link></center>
             </div>

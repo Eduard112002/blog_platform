@@ -4,8 +4,10 @@ import { format } from 'date-fns';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Alert, Space, Spin } from "antd";
+import {bindActionCreators} from "redux";
+import * as actions from "../../actions";
 
-const Article = ({ articlesList, loading, error }) => {
+const Article = ({ articlesList, loading, error, addArticles }) => {
     const { id } = useParams();
     if (loading) {
         return (
@@ -30,6 +32,13 @@ const Article = ({ articlesList, loading, error }) => {
             </div>
         )
     }
+   const imgError = () => {
+        const articleIndex = articlesList.findIndex((el) => el.id === id);
+        let newEl = articlesList[articleIndex];
+        newEl = {...newEl, author:{ ...newEl.author, image: 'https://www.svgrepo.com/show/442075/avatar-default-symbolic.svg'}}
+        addArticles([...articlesList.slice(0, articleIndex), newEl, ...articlesList.slice(articleIndex + 1)])
+       console.clear();
+    }
     const article = articlesList.find((el) => el.id === id);
     const tag = tegList(article.tagList);
     const [year, month, day] = article.createdAt.slice(0, 10).split('-');
@@ -49,7 +58,7 @@ const Article = ({ articlesList, loading, error }) => {
                     <h3 className="article_user_info__name">{article.author.username}</h3>
                     <span className="article_user_info__date">{newData}</span>
                 </div>
-                <img className="article_user_info__icon" src={article.author.image} alt="author_icon"/>
+                <img className="article_user_info__icon" src={article.author.image} onError={imgError} alt="user_icon"/>
             </div>
         </div>
         <div className="article_content">
@@ -75,4 +84,8 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(Article);
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(actions, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Article);

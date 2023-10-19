@@ -3,10 +3,9 @@ const defaultStateArticles= {
     loading: true,
     error: false,
     page: 1,
-    token:'',
     eyePassword: true,
     emailInvalid: false,
-    userInfo: {},
+    userInfo: null,
 }
 
 const addArticlesReducer = (state = defaultStateArticles, action) => {
@@ -17,8 +16,6 @@ const addArticlesReducer = (state = defaultStateArticles, action) => {
             return {...state, loading: false, error: action.error};
         case "ADD_PAGE":
             return {...state, page: action.page}
-        case "ADD_TOKEN":
-            return {...state, token: action.token}
         case "ADD_USER_INFO":
             return {...state, userInfo: action.userInfo}
         case "EMAIL_INVALID":

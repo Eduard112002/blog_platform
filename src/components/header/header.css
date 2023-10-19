@@ -50,3 +50,51 @@
     box-shadow: 0 0 2px 2px rgba(88, 232, 2, 0.88) inset;
 }
 
+.head_nav{
+    display: flex;
+}
+
+.create_article{
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+.create_article{
+    color: rgba(81, 213, 0, 0.88);
+    border: 1px solid rgba(88, 232, 2, 0.88);
+    margin-right: 20px;
+    margin-top: 10px;
+}
+
+.create_article:active{
+    box-shadow: 0 0 1px 1px rgba(88, 232, 2, 0.88) inset;
+}
+
+.head_user_icon{
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.exit{
+    border: 1px solid #000000;
+    color: #000;
+    padding: 11px 23px 13px 23px;
+    font-size: 18px;
+    margin-top: 0;
+}
+
+.exit:active{
+    color: #000000;
+    box-shadow: 0 0 2px 2px rgba(93, 93, 93, 0.82) inset;
+}
+
+.head_user__name{
+    margin: 12px 10px 0 0;
+    box-sizing: border-box;
+}

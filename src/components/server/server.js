@@ -1,8 +1,10 @@
 import { Component } from 'react';
-import {addArticles, addArticlesError, addEmailInvalid, addToken} from '../../actions';
+import {addArticles, addArticlesError, addEmailInvalid, addUserInfo, addSignInEmail, addSignInPassword, } from '../../actions';
 import store from '../../store';
+import { useNavigate } from "react-router-dom";
 
 export default class Server extends Component {
+    navigate = useNavigate();
     dispatch = store.dispatch;
    async articleList(page){
        let offset = 0;
@@ -43,32 +45,43 @@ export default class Server extends Component {
         const bodyString = JSON.stringify({
             "user": {"username":`${username}`,"email":`${email}`,"password":`${password}`}
         })
-        fetch('https://blog.kata.academy/api/users', {
+       await fetch('https://blog.kata.academy/api/users', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
             },
             body: bodyString,
-        });
+        })
+        await this.userSignIn(email, password);
     }
    async userSignIn(email, password) {
        const bodyString = JSON.stringify({
            "user": {"email":`${email}`,"password":`${password}`}
        })
-      await fetch('https://blog.kata.academy/api/users/login', {
+     let res = await fetch('https://blog.kata.academy/api/users/login', {
            method: "POST",
            headers: {
                "Content-Type": "application/json;charset=utf-8",
            },
            body: bodyString,
        }).then((res) => res.json())
-          .then((res) => {
-              this.dispatch(addToken(res.user.token))
-              this.dispatch(addArticlesError(false))
-              this.dispatch(addEmailInvalid(1))
-          })
-          .catch(() => this.dispatch(addEmailInvalid(true)));
+         .catch((error) => {
+             this.dispatch(addEmailInvalid(true));
+             return error
+         })
+       if (res.errors === undefined) {
+           this.dispatch(addUserInfo(res.user));
+           this.dispatch(addArticlesError(false));
+           this.dispatch(addEmailInvalid(false));
+           localStorage.setItem('token', res.user.token);
+           localStorage.setItem('username', res.user.username);
+           this.dispatch(addSignInEmail(''));
+           this.dispatch(addSignInPassword(''));
+           return this.navigate("/");
+       } else {
+           this.dispatch(addEmailInvalid(true));
+           console.clear();
+       }
    }
-//"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MmZmNzUzZmYzY2M4MWIwMGRhYzQ2OCIsInVzZXJuYW1lIjoiZWR1YXJkIiwiZXhwIjoxNzAyODI2MzIzLCJpYXQiOjE2OTc2NDIzMjN9.gxrgBh054YBc31lZC4nSyh6nJGblEKuqedFhhPGIZok"
 }
 

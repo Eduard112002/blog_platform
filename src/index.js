@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import store from './store';
@@ -14,8 +14,10 @@ import SignInAccount from './components/sign-in-account';
 
 const App = () => {
     const server = new Server();
+    let navigate = useNavigate();
     useEffect(() => {
         server.getArticleList();
+        return navigate("/");
     }, [])
    return <>
        <Provider store={store}>
