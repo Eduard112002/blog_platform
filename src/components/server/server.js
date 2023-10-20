@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import {addArticles, addArticlesError, addEmailInvalid, addUserInfo, addSignInEmail, addSignInPassword, } from '../../actions';
+import { addArticles, addArticlesError, addEmailInvalid, addUserInfo, addSignInEmail, addSignInPassword, addError,
+         addUserName, addEmail, addPassword, addPasswordRepeat, addChecked} from '../../actions';
 import store from '../../store';
 import { useNavigate } from "react-router-dom";
 
@@ -51,8 +52,21 @@ export default class Server extends Component {
                 "Content-Type": "application/json;charset=utf-8",
             },
             body: bodyString,
-        })
-        await this.userSignIn(email, password);
+        }).then((res) => {
+            if (res.ok) {
+                this.userSignIn(email, password);
+                this.dispatch(addUserName(''));
+                this.dispatch(addEmail(''));
+                this.dispatch(addPassword(''));
+                this.dispatch(addPasswordRepeat(''));
+                this.dispatch(addChecked(false));
+                this.dispatch(addError(''))
+                return this.navigate("/");
+            } else {
+                this.dispatch(addError('is already taken.'));
+                console.clear();
+            }
+       })
     }
    async userSignIn(email, password) {
        const bodyString = JSON.stringify({
@@ -73,15 +87,50 @@ export default class Server extends Component {
            this.dispatch(addUserInfo(res.user));
            this.dispatch(addArticlesError(false));
            this.dispatch(addEmailInvalid(false));
-           localStorage.setItem('token', res.user.token);
-           localStorage.setItem('username', res.user.username);
+           if (sessionStorage.getItem('token')) {
+               sessionStorage.removeItem('token');
+               sessionStorage.setItem('token', res.user.token);
+           } else {
+               sessionStorage.setItem('token', res.user.token);
+           }
+           sessionStorage.setItem('image', res.user.image);
+           sessionStorage.setItem('username', res.user.username);
            this.dispatch(addSignInEmail(''));
            this.dispatch(addSignInPassword(''));
            return this.navigate("/");
        } else {
            this.dispatch(addEmailInvalid(true));
-           console.clear();
        }
+   }
+   async updateCurrentUser(email, username, newPassword, image, token, userInfo) {
+       const bodyString = JSON.stringify({
+           "user": {"email":`${email}`,"username":`${username}`,"bio":"", "image": `${image}`, "password":`${newPassword}`}
+       })
+     await fetch('https://blog.kata.academy/api/user', {
+           method: "PUT",
+           headers: {
+               "Content-Type": "application/json;charset=utf-8",
+               Authorization: `Token ${token}`
+           },
+           body: bodyString,
+       }).then((res) => {
+           if (res.ok) {
+              return res.json()
+           } else {
+               this.dispatch(addError('data entered incorrectly'));
+               console.clear();
+           }
+       }).then((res) => {
+         this.dispatch(addSignInEmail(''));
+         this.dispatch(addSignInPassword(''));
+           sessionStorage.setItem('image', res.user.image);
+               this.dispatch(addUserInfo({
+                   ...userInfo,
+                   image: res.user.image,
+               }))
+         this.dispatch(addError(''))
+         return this.navigate("/");
+           })
    }
 }
 

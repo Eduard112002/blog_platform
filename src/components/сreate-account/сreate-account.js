@@ -1,15 +1,16 @@
 import React from 'react';
 import './сreate-account.css';
 import { bindActionCreators } from 'redux';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import Server from '../server';
 import { useForm } from 'react-hook-form';
 
 const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName, addEmail, addPassword, addPasswordRepeat,
-                           addTypePassword, addTypePasswordRepeat, typePassword, typePasswordRepeat, addChecked, checked}) => {
+                           addTypePassword, addTypePasswordRepeat, typePassword, typePasswordRepeat, addChecked, checked, error}) => {
     const server = new Server();
+    const errorInvalid = error ? <span className="invalid_error">{error}</span> : null;
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             userName: '',
@@ -19,16 +20,9 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName,
             checkbox: false,
         }
     });
-    let navigate = useNavigate();
     const logIn = (data) => {
          const { userName, email, password} = data;
          server.registerNewUser(userName, email, password);
-         addUserName('');
-         addEmail('');
-         addPassword('');
-         addPasswordRepeat('');
-         addChecked(false);
-         return navigate("/");
     }
     return <div className="create">
         <form className="create_form" onSubmit={(e) => e.preventDefault()}>
@@ -144,6 +138,7 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName,
                 <input
                     type="checkbox"
                     className="form_checked"
+                    id="checkbox"
                     required
                     checked={checked}
                     {...register("checkbox", {required: {
@@ -154,10 +149,11 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName,
                         onChange: (e) => addChecked(e.target.checked),
                     })}
                 />
-                <label className="title_form checked" style={errors.checkbox?.message ? {color: '#ff000e'} : null}>
+                <label htmlFor="checkbox" className="title_form checked" style={errors.checkbox?.message ? {color: '#ff000e'} : null}>
                     I agree to the processing of my personal information
                 </label>
             </div>
+            { errorInvalid }
             <button className="create_log-in" onClick={handleSubmit((data) => logIn(data))}>Create</button>
             <div>
                 <center className="login-account">Already have an account?<Link to='/singIn' className="login-account_link"> Sign In.</Link></center>
@@ -168,6 +164,7 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName,
 
 const mapStateToProps = (state) => {
     const newAccount = state.addNewAccountReducer;
+    const singIn = state.addUserSignInReducer;
     return {
         userName: newAccount.userName,
         email: newAccount.email,
@@ -177,7 +174,8 @@ const mapStateToProps = (state) => {
         errorPasswordRepeat: newAccount.errorPasswordRepeat,
         typePassword: newAccount.typePassword,
         typePasswordRepeat: newAccount.typePasswordRepeat,
-        checked: newAccount.checked
+        checked: newAccount.checked,
+        error: singIn.error,
     }
 }
 

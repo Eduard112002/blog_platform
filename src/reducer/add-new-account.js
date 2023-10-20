@@ -3,8 +3,6 @@ const defaultStateNewAccount = {
     email: '',
     password: '',
     passwordRepeat: '',
-    errorPassword: false,
-    errorPasswordRepeat: false,
     typePassword: true,
     typePasswordRepeat: true,
     checked: false,
@@ -20,10 +18,6 @@ const addNewAccountReducer = (state = defaultStateNewAccount, action) => {
             return {...state, password: action.password};
         case 'ADD_PASSWORD_REPEAT':
             return {...state, passwordRepeat: action.passwordRepeat};
-        case 'ADD_ERROR_PASSWORD':
-            return {...state, errorPassword: action.errorPassword};
-        case 'ADD_ERROR_PASSWORD_REPEAT':
-            return {...state, errorPasswordRepeat: action.errorPasswordRepeat};
         case 'ADD_TYPE_PASSWORD':
             return {...state, typePassword: action.typePassword};
         case 'ADD_TYPE_PASSWORD_REPEAT':

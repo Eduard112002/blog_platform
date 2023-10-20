@@ -9,6 +9,10 @@ const Articles = ({ articles, articlesList, addArticles }) => {
     const tag = tegList(articles.tagList);
     const [year, month, day] = articles.createdAt.slice(0, 10).split('-');
     const newData = format(new Date(year, month - 1, day), 'LLLL dd, yyyy');
+    const consl = (e) => {
+        console.log('tyt')
+        e.stopPropagation();
+    }
     const imgError = () => {
         const articleIndex = articlesList.findIndex((el) => el.id === articles.id);
         let newEl = articlesList[articleIndex];
@@ -20,7 +24,9 @@ const Articles = ({ articles, articlesList, addArticles }) => {
        <div className="articles_content">
            <div>
                <span className="articles_title">{articles.slug}</span>
-               <span className="articles_like">{articles.favoritesCount}</span>
+               <button className="articles_like" type='button' onClick={(e) => {
+                   consl(e)
+               }} children={articles.favoritesCount}/>
            </div>
                {tag}
                <p className="articles_text">{articles.title}</p>
@@ -37,11 +43,12 @@ const Articles = ({ articles, articlesList, addArticles }) => {
 
 const tegList = (arr) => {
     return arr.map((el, index) => {
-        if (index < 3 && el.trim().length) {
+        if (index < 3 && el && el.trim().length) {
             return <span className="articles_tag" key={index}>{el.length < 20 ? el : el.slice(0, 20) + '...'}</span>
         }
     });
 }
+
 
 const mapStateToProps = (state) => {
     const articles = state.addArticlesReducer;

@@ -63,6 +63,7 @@
     right: 10px;
     border: none;
     padding: 0;
+    cursor: pointer;
 }
 
 .sign-in_eye_password[type=text] {

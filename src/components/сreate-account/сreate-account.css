@@ -47,12 +47,14 @@ input::placeholder{
 .checked{
     color: #595959;
     margin-bottom: 20px;
+    cursor: pointer;
 }
 
 .form_checked{
     width: 16px;
     height: 16px;
     margin-right: 5px;
+    cursor: pointer;
 }
 
 .create_log-in{
@@ -93,6 +95,7 @@ input::placeholder{
     right: 10px;
     border: none;
     padding: 0;
+    cursor: pointer;
 }
 
 .eye_password[type=text] {
@@ -101,5 +104,12 @@ input::placeholder{
 
 .eye_password[type=password] {
     background: url("../../img/not-eye.svg") no-repeat center;
+}
+
+.invalid_error{
+    display: inline-block;
+    font-size: 14px;
+    color: #ff000e;
+    margin-bottom: 15px;
 }
 

@@ -5,23 +5,21 @@ import Server from '../server';
 import {bindActionCreators} from "redux";
 import * as actions from "../../actions";
 import { connect } from 'react-redux';
+import { useForm } from 'react-hook-form';
 
-const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, emailInvalid, addEmailInvalid, addEyePassword, eyePassword }) => {
+const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, addEyePassword, eyePassword, emailInvalid }) => {
     const server = new Server();
-    const errors = emailInvalid ? <span className="title_error">Email or password is invalid.</span> : null;
-    const signIn = () => {
-        const emailArr = email.split('');
-        const newArr = emailArr.some((el, index) => {
-            if (el ==='@' && index !== emailArr.length - 1) {
-                addEmailInvalid(true)
-                return true;
-            }
-        });
-        if (newArr && password.length) {
+    const error = emailInvalid ? <span className="title_error">invalid email or password</span> : null;
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            email: email,
+            password: password,
+        }
+    });
+    const signIn = (data) => {
+        const { email, password } = data;
             server.userSignIn(email, password);
             addEyePassword(true);
-            addEmailInvalid(false)
-        }
     }
     return <div className="sign-in">
         <form className="sign-in_form" onSubmit={(e) => e.preventDefault()}>
@@ -32,11 +30,18 @@ const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, ema
                     className="sign-in_input__form"
                     type="email"
                     placeholder="Email address"
-                    value={email}
+                    {...register("email",{
+                        pattern: {
+                            value: /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu,
+                            message: 'Invalid email address.'
+                        },
+                        value: email,
+                    })}
                     onChange={(e) => addSignInEmail(e.target.value)}
                     autoFocus
                     required
                 />
+                <span className="title_error">{errors.email?.message}</span>
             </div>
             <div className="sign-in_container__from">
                 <label className="sign-in_title__form">Password</label>
@@ -44,18 +49,35 @@ const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, ema
                     className="sign-in_input__form password"
                     type={eyePassword ? "password" : "text"}
                     placeholder="Password"
-                    value={password} onChange={(e) => addSignInPassword(e.target.value)}
+                    {...register("password", {required: true,
+                        minLength:{
+                            value: 6,
+                            message: 'Your password needs to be at least 6 characters.',
+                        }, maxLength: {
+                            value: 40,
+                            message: 'Your password must contain no more than 40 characters.'
+                        },
+                        value: password,
+                      })}
+                    onChange={(e) => addSignInPassword(e.target.value)}
                     required
                 />
                 <button
                     className="sign-in_eye_password"
                     type={eyePassword ? "password" : "text"}
                     onClick={() => addEyePassword(!eyePassword)}
-                    style={emailInvalid ? {top: '38%'} : {top: '45%'}}
+                    style={errors.password?.message ? {top: '37%'} : {top: '45%'}}
                 ></button>
-                {errors}
+                <span className="title_error">{errors.password?.message}</span>
             </div>
-                <button className="sign-in_but" onClick={signIn}>Login</button>
+            {error}
+                <button
+                    className="sign-in_but"
+                    onClick={handleSubmit((data) => signIn(data))}
+                    style={error ? {marginTop: '20px'} : null}
+                >
+                        Login
+                </button>
             <div>
                 <center className="login-account">Don’t have an account?<Link to='/singUp' className="login-account_link"> Sign Up.</Link></center>
             </div>

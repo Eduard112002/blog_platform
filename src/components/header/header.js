@@ -6,29 +6,32 @@ import {bindActionCreators} from "redux";
 import * as actions from "../../actions";
 
 const Header = ({ addUserInfo, userInfo }) => {
+    const img = userInfo?.image === 'undefined' ||  !userInfo?.image ? 'https://www.svgrepo.com/show/442075/avatar-default-symbolic.svg' : userInfo?.image;
     const exit = () => {
-        addUserInfo({})
-        localStorage.clear()
+        addUserInfo({});
+        sessionStorage.clear();
     }
     useEffect(() => {
-        if (localStorage.getItem('token')) {
+        if (sessionStorage.getItem('token')) {
             addUserInfo({
                 ...userInfo,
-                token: localStorage.getItem('token'),
-                username: localStorage.getItem('username'),
-                image: null,
+                token: sessionStorage.getItem('token'),
+                username: sessionStorage.getItem('username'),
+                image: sessionStorage.getItem('image'),
             })
         }
-    }, [localStorage.getItem('token')]);
-   if (localStorage.getItem('username')) {
+    }, [sessionStorage.getItem('token')]);
+   if (userInfo?.username) {
         return (
             <div className="head">
                 <Link to="/" className="head_link"><span className="head_title">Realworld Blog</span></Link>
                 <div className="head_nav">
                     <Link to="/singIn" className="create_article"><span>Create article</span></Link>
-                        <h3 className="head_user__name">{localStorage.getItem('username')}</h3>
-                        <img className="head_user_icon" src={'https://www.svgrepo.com/show/442075/avatar-default-symbolic.svg'} alt="user_icon"/>
-                    <Link to="/" className="create_article exit"><span onClick={exit}>Log Out</span></Link>
+                     <Link to="/profile" className="link_user">
+                         <h3 className="head_user__name">{userInfo?.username}</h3>
+                        <img className="head_user_icon" src={img} alt="user_icon"/>
+                     </Link>
+                    <button className="but_exit" onClick={exit}><Link to="/" className="create_article exit">Log Out</Link></button>
                 </div>
             </div>
         )

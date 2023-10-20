@@ -1,6 +1,7 @@
 const defaultStateAccount = {
     email: '',
     password: '',
+    error: '',
 }
 
 const addUserSignInReducer = (state = defaultStateAccount, action) => {
@@ -9,6 +10,9 @@ const addUserSignInReducer = (state = defaultStateAccount, action) => {
             return {...state, email: action.email};
         case 'ADD_SIGN_IN_PASSWORD':
             return {...state, password: action.password};
+        case 'ADD_ERROR':
+            console.log(action.error)
+            return {...state, error: action.error};
         default:
             return state;
     }

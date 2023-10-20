@@ -26,10 +26,10 @@ export const addSignInEmail = (payload) => ({type: "ADD_SIGN_IN_EMAIL", email: p
 
 export const addSignInPassword = (payload) => ({type: "ADD_SIGN_IN_PASSWORD", password: payload});
 
-export const addToken = (payload) => ({type: "ADD_TOKEN", token: payload});
-
 export const addUserInfo = (payload) => ({type: "ADD_USER_INFO", userInfo: payload});
 
 export const addEmailInvalid = (payload) => ({type: "EMAIL_INVALID", emailInvalid: payload});
 
 export const addEyePassword = (payload) => ({type: "EYE_PASSWORD", eyePassword: payload});
+
+export const addError = (payload) => ({type: "ADD_ERROR", error: payload});

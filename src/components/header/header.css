@@ -98,3 +98,13 @@
     margin: 12px 10px 0 0;
     box-sizing: border-box;
 }
+
+.but_exit{
+    border: none;
+}
+
+.link_user{
+    display: flex;
+    color: #000000;
+    text-decoration: none;
+}
