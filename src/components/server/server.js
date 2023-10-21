@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 export default class Server extends Component {
     navigate = useNavigate();
     dispatch = store.dispatch;
+    urlFavorite = (slug) => `https://blog.kata.academy/api/articles/${slug}/favorite`;
+
    async articleList(page){
        let offset = 0;
        switch (page) {
@@ -132,5 +134,35 @@ export default class Server extends Component {
          return this.navigate("/");
            })
    }
+   async likeArticle(token, slug, articlesList) {
+       console.log('like');
+       await fetch(this.urlFavorite(slug), {
+           method: "POST",
+           headers: {
+               "Content-Type": "application/json;charset=utf-8",
+               Authorization: `Token ${token}`
+           },
+       }).then((res) => res.json())
+           .then((res) => {
+               const index = articlesList.findIndex((el) => el.slug === res.article.slug)
+               const newEl = {...res.article, id:`${articlesList[index].createdAt}_${articlesList[index].author.username}`};
+               console.log(articlesList,'old', [...articlesList.slice(0, index), newEl, ...articlesList.slice(index + 1)], 'new');
+               this.dispatch(addArticles([...articlesList.slice(0, index), newEl, ...articlesList.slice(index + 1)]))
+           })
+   }
+   async unFavoriteArticle(token, slug, articlesList) {
+       console.log('delete like');
+       await fetch(this.urlFavorite(slug), {
+           method: "DELETE",
+           headers: {
+               "Content-Type": "application/json;charset=utf-8",
+               Authorization: `Token ${token}`
+           },
+       }).then((res) => res.json())
+           .then((res) => {
+               const index = articlesList.findIndex((el) => el.slug === res.article.slug)
+               const newEl = {...res.article, id:`${articlesList[index].createdAt}_${articlesList[index].author.username}`};
+               this.dispatch(addArticles([...articlesList.slice(0, index), newEl, ...articlesList.slice(index + 1)]))
+           })
+    }
 }
-

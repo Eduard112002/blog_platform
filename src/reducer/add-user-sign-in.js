@@ -11,7 +11,6 @@ const addUserSignInReducer = (state = defaultStateAccount, action) => {
         case 'ADD_SIGN_IN_PASSWORD':
             return {...state, password: action.password};
         case 'ADD_ERROR':
-            console.log(action.error)
             return {...state, error: action.error};
         default:
             return state;

@@ -1,17 +1,22 @@
 import React from 'react';
 import './articles.css';
 import { format } from 'date-fns';
-import { connect } from "react-redux";
-import {bindActionCreators} from "redux";
-import * as actions from "../../actions";
+import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as actions from '../../actions';
+import Server from '../server';
 
 const Articles = ({ articles, articlesList, addArticles }) => {
     const tag = tegList(articles.tagList);
     const [year, month, day] = articles.createdAt.slice(0, 10).split('-');
     const newData = format(new Date(year, month - 1, day), 'LLLL dd, yyyy');
+    const server = new Server();
     const consl = (e) => {
-        console.log('tyt')
-        e.stopPropagation();
+        if (sessionStorage.getItem('token')) {
+            articles.favorited ? server.unFavoriteArticle(sessionStorage.getItem('token'), articles.slug, articlesList) :
+                server.likeArticle(sessionStorage.getItem('token'), articles.slug, articlesList);
+        }
+        e.preventDefault();
     }
     const imgError = () => {
         const articleIndex = articlesList.findIndex((el) => el.id === articles.id);
@@ -20,13 +25,12 @@ const Articles = ({ articles, articlesList, addArticles }) => {
         addArticles([...articlesList.slice(0, articleIndex), newEl, ...articlesList.slice(articleIndex + 1)])
         console.clear();
     }
+    console.log(articles.favorited)
    return <div className="articles">
        <div className="articles_content">
            <div>
                <span className="articles_title">{articles.slug}</span>
-               <button className="articles_like" type='button' onClick={(e) => {
-                   consl(e)
-               }} children={articles.favoritesCount}/>
+               <button className="articles_like" type='button' onClick={(e) => consl(e)}>{articles.favoritesCount}</button>
            </div>
                {tag}
                <p className="articles_text">{articles.title}</p>

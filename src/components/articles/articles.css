@@ -18,7 +18,7 @@
 .articles_title{
     display: inline-block;
     font-size: 20px;
-    margin-right: 30px;
+    margin-right: 10px;
     margin-bottom: 10px;
     color: #1890FF;
     max-width: 90%;
@@ -27,13 +27,14 @@
 
 .articles_like{
     display: inline-block;
-    padding-top: 7px;
+    padding-top: 10px;
+    padding-bottom: 5px;
     vertical-align: top;
     position: relative;
-    height: 120px;
     border: none;
     cursor: pointer;
-    width: 100px;
+    padding-right: 0;
+    width: 50px;
 }
 
 .articles_like:before{
@@ -41,8 +42,8 @@
     position: absolute;
     width: 20px;
     height: 20px;
-    left: -22px;
-    top: 6px;
+    left: 0;
+    top: 7px;
     background: url("../../img/like.svg") no-repeat center;
 }
 
