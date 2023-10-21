@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { addArticles, addArticlesError, addEmailInvalid, addUserInfo, addSignInEmail, addSignInPassword, addError,
-         addUserName, addEmail, addPassword, addPasswordRepeat, addChecked} from '../../actions';
+         addUserName, addEmail, addPassword, addPasswordRepeat, addChecked, addCreateTag,
+         addCreateTitle, addCreateDescription, addCreateBody} from '../../actions';
 import store from '../../store';
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +11,8 @@ export default class Server extends Component {
     urlFavorite = (slug) => `https://blog.kata.academy/api/articles/${slug}/favorite`;
 
    async articleList(page){
+       const token = sessionStorage.getItem('token');
+       const body = sessionStorage.getItem('token') ? {headers: {"Content-Type": "application/json;charset=utf-8", Authorization: `Token ${token}`}} : null;
        let offset = 0;
        switch (page) {
            case 1:
@@ -28,7 +31,7 @@ export default class Server extends Component {
                offset = 80
                break;
        }
-         const result = await fetch(`https://blog.kata.academy/api/articles?offset=${offset}`);
+         const result = await fetch(`https://blog.kata.academy/api/articles?offset=${offset}`, body);
          if (!result.ok) {
              this.dispatch(addArticlesError(true))
              return {articles: []};
@@ -99,6 +102,7 @@ export default class Server extends Component {
            sessionStorage.setItem('username', res.user.username);
            this.dispatch(addSignInEmail(''));
            this.dispatch(addSignInPassword(''));
+           this.getArticleList();
            return this.navigate("/");
        } else {
            this.dispatch(addEmailInvalid(true));
@@ -135,7 +139,6 @@ export default class Server extends Component {
            })
    }
    async likeArticle(token, slug, articlesList) {
-       console.log('like');
        await fetch(this.urlFavorite(slug), {
            method: "POST",
            headers: {
@@ -146,12 +149,10 @@ export default class Server extends Component {
            .then((res) => {
                const index = articlesList.findIndex((el) => el.slug === res.article.slug)
                const newEl = {...res.article, id:`${articlesList[index].createdAt}_${articlesList[index].author.username}`};
-               console.log(articlesList,'old', [...articlesList.slice(0, index), newEl, ...articlesList.slice(index + 1)], 'new');
                this.dispatch(addArticles([...articlesList.slice(0, index), newEl, ...articlesList.slice(index + 1)]))
            })
    }
    async unFavoriteArticle(token, slug, articlesList) {
-       console.log('delete like');
        await fetch(this.urlFavorite(slug), {
            method: "DELETE",
            headers: {
@@ -164,5 +165,26 @@ export default class Server extends Component {
                const newEl = {...res.article, id:`${articlesList[index].createdAt}_${articlesList[index].author.username}`};
                this.dispatch(addArticles([...articlesList.slice(0, index), newEl, ...articlesList.slice(index + 1)]))
            })
+    }
+
+    async createArticle({token, title, description, body, tags}) {
+        const bodyString = JSON.stringify({
+            "article": {"title":`${title}`,"description":`${description}`,"body": `${body}`, "tags": [...tags]}
+        })
+        await fetch('https://blog.kata.academy/api/articles', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+                Authorization: `Token ${token}`
+            },
+            body: bodyString,
+        }).then(() => {
+            this.getArticleList();
+            this.dispatch(addCreateTag(''));
+            this.dispatch(addCreateTitle(''));
+            this.dispatch(addCreateDescription(''));
+            this.dispatch(addCreateBody(''));
+            return this.navigate("/");
+        })
     }
 }

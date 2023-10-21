@@ -11,7 +11,7 @@ const Articles = ({ articles, articlesList, addArticles }) => {
     const [year, month, day] = articles.createdAt.slice(0, 10).split('-');
     const newData = format(new Date(year, month - 1, day), 'LLLL dd, yyyy');
     const server = new Server();
-    const consl = (e) => {
+    const addLike = (e) => {
         if (sessionStorage.getItem('token')) {
             articles.favorited ? server.unFavoriteArticle(sessionStorage.getItem('token'), articles.slug, articlesList) :
                 server.likeArticle(sessionStorage.getItem('token'), articles.slug, articlesList);
@@ -25,12 +25,12 @@ const Articles = ({ articles, articlesList, addArticles }) => {
         addArticles([...articlesList.slice(0, articleIndex), newEl, ...articlesList.slice(articleIndex + 1)])
         console.clear();
     }
-    console.log(articles.favorited)
+    const like = articles.favorited ? 'articles_like like' : 'articles_like no_like';
    return <div className="articles">
        <div className="articles_content">
            <div>
                <span className="articles_title">{articles.slug}</span>
-               <button className="articles_like" type='button' onClick={(e) => consl(e)}>{articles.favoritesCount}</button>
+               <button className={like} type='button' onClick={(e) => addLike(e)}>{articles.favoritesCount}</button>
            </div>
                {tag}
                <p className="articles_text">{articles.title}</p>

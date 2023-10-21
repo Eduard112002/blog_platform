@@ -7,7 +7,7 @@ import * as actions from "../../actions";
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
-const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, addEyePassword, eyePassword, emailInvalid }) => {
+const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, addEyePassword, eyePassword, emailInvalid, addLoading }) => {
     const server = new Server();
     const error = emailInvalid ? <span className="title_error">invalid email or password</span> : null;
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -20,6 +20,7 @@ const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, add
         const { email, password } = data;
             server.userSignIn(email, password);
             addEyePassword(true);
+            addLoading()
     }
     return <div className="sign-in">
         <form className="sign-in_form" onSubmit={(e) => e.preventDefault()}>

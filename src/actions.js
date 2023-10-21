@@ -33,3 +33,13 @@ export const addEmailInvalid = (payload) => ({type: "EMAIL_INVALID", emailInvali
 export const addEyePassword = (payload) => ({type: "EYE_PASSWORD", eyePassword: payload});
 
 export const addError = (payload) => ({type: "ADD_ERROR", error: payload});
+
+export const addLoading = () => ({type: 'LOADING'});
+
+export const addCreateTag = (payload) => ({type: "ADD_TAG", tag: payload});
+
+export const addCreateTitle = (payload) => ({type: "ADD_TITLE", title: payload});
+
+export const addCreateDescription = (payload) => ({type: "ADD_DESCRIPTION", description: payload});
+
+export const addCreateBody = (payload) => ({type: "ADD_BODY", body: payload});

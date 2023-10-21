@@ -6,9 +6,11 @@ import { useParams } from 'react-router-dom';
 import { Alert, Space, Spin } from "antd";
 import {bindActionCreators} from "redux";
 import * as actions from "../../actions";
+import Server from '../server';
 
 const Article = ({ articlesList, loading, error, addArticles }) => {
     const { id } = useParams();
+    const server = new Server();
     if (loading) {
         return (
             <Space direction="vertical" style={{ width: '100%' }} className="spin">
@@ -32,14 +34,21 @@ const Article = ({ articlesList, loading, error, addArticles }) => {
             </div>
         )
     }
-   const imgError = () => {
+    const imgError = () => {
         const articleIndex = articlesList.findIndex((el) => el.id === id);
         let newEl = articlesList[articleIndex];
         newEl = {...newEl, author:{ ...newEl.author, image: 'https://www.svgrepo.com/show/442075/avatar-default-symbolic.svg'}}
         addArticles([...articlesList.slice(0, articleIndex), newEl, ...articlesList.slice(articleIndex + 1)])
-       console.clear();
+        console.clear();
+    }
+    const addLike = () => {
+        if (sessionStorage.getItem('token')) {
+            article.favorited ? server.unFavoriteArticle(sessionStorage.getItem('token'), article.slug, articlesList) :
+                server.likeArticle(sessionStorage.getItem('token'), article.slug, articlesList);
+        }
     }
     const article = articlesList.find((el) => el.id === id);
+    const like = article.favorited ? 'articles_like like' : 'articles_like no_like';
     const tag = tegList(article.tagList);
     const [year, month, day] = article.createdAt.slice(0, 10).split('-');
     const newData = format(new Date(year, month - 1, day), 'LLLL dd, yyyy');
@@ -48,7 +57,7 @@ const Article = ({ articlesList, loading, error, addArticles }) => {
             <div className="article_header">
                 <div>
                     <span className="article_title">{article.slug}</span>
-                    <span className="article_like">{article.favoritesCount}</span>
+                    <button className={like} onClick={addLike}>{article.favoritesCount}</button>
                 </div>
                 {tag}
                 <p className="article_text">{article.title}</p>
@@ -75,6 +84,7 @@ const tegList = (arr) => {
         }
     });
 }
+
 const mapStateToProps = (state) => {
     const articles = state.addArticlesReducer;
     return {

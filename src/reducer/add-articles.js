@@ -11,7 +11,7 @@ const defaultStateArticles= {
 const addArticlesReducer = (state = defaultStateArticles, action) => {
     switch(action.type) {
         case 'ADD_ARTICLES':
-            return {...state, loading: false, articlesList: [...action.articlesArr]};
+            return {...state, loading: false, articlesList: action.articlesArr};
         case "ADD_ERROR":
             return {...state, loading: false, error: action.error};
         case "ADD_PAGE":
@@ -22,6 +22,8 @@ const addArticlesReducer = (state = defaultStateArticles, action) => {
             return {...state, emailInvalid: action.emailInvalid}
         case "EYE_PASSWORD":
             return {...state, eyePassword: action.eyePassword}
+        case "LOADING":
+            return {...state, loading: true}
         default:
             return state;
     }

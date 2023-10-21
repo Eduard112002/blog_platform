@@ -12,6 +12,7 @@ import Article from './components/article';
 import CreateAccount from './components/сreate-account';
 import SignInAccount from './components/sign-in-account';
 import EditProfile from './components/edit-profile';
+import PrivateRouter from "./components/utils/private-router";
 
 const App = () => {
     const server = new Server();
@@ -30,6 +31,7 @@ const App = () => {
                <Route path="/singUp" element={<CreateAccount />}/>
                <Route path="/singIn" element={<SignInAccount />}/>
                <Route path="/profile" element={<EditProfile />}/>
+               <Route path="/new-article" element={<PrivateRouter />}/>
                <Route path="*" element={<ArticlesList />}/>
            </Routes>
        </Provider>

@@ -35,9 +35,10 @@
     cursor: pointer;
     padding-right: 0;
     width: 50px;
+    background-color: white;
 }
 
-.articles_like:before{
+.like:before{
     content: '';
     position: absolute;
     width: 20px;
@@ -45,6 +46,16 @@
     left: 0;
     top: 7px;
     background: url("../../img/like.svg") no-repeat center;
+}
+
+.no_like:before{
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 0;
+    top: 7px;
+    background: url("../../img/nolike.svg") no-repeat center;
 }
 
 .articles_tag{

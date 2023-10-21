@@ -4,12 +4,19 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as actions from "../../actions";
+import Server from '../server';
+import { useNavigate } from "react-router-dom";
 
-const Header = ({ addUserInfo, userInfo }) => {
+const Header = ({ addUserInfo, userInfo, addLoading }) => {
     const img = userInfo?.image === 'undefined' ||  !userInfo?.image ? 'https://www.svgrepo.com/show/442075/avatar-default-symbolic.svg' : userInfo?.image;
+    const server = new Server();
+    const navigate = useNavigate();
     const exit = () => {
-        addUserInfo({});
         sessionStorage.clear();
+        addUserInfo({});
+        server.getArticleList();
+        addLoading();
+        return navigate('/');
     }
     useEffect(() => {
         if (sessionStorage.getItem('token')) {
@@ -26,7 +33,7 @@ const Header = ({ addUserInfo, userInfo }) => {
             <div className="head">
                 <Link to="/" className="head_link"><span className="head_title">Realworld Blog</span></Link>
                 <div className="head_nav">
-                    <Link to="/singIn" className="create_article"><span>Create article</span></Link>
+                    <Link to='/new-article' className="create_article"><span>Create article</span></Link>
                      <Link to="/profile" className="link_user">
                          <h3 className="head_user__name">{userInfo?.username}</h3>
                         <img className="head_user_icon" src={img} alt="user_icon"/>
