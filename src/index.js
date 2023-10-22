@@ -26,12 +26,12 @@ const App = () => {
            <Header />
            <Routes>
                <Route path="/" element={<ArticlesList />} />
-               <Route path="/article" element={<Article />} />
                <Route path="/articles/:id" element={<Article />}/>
                <Route path="/singUp" element={<CreateAccount />}/>
                <Route path="/singIn" element={<SignInAccount />}/>
                <Route path="/profile" element={<EditProfile />}/>
                <Route path="/new-article" element={<PrivateRouter />}/>
+               <Route path="/articles/:slug/edit" element={<PrivateRouter />}/>
                <Route path="*" element={<ArticlesList />}/>
            </Routes>
        </Provider>

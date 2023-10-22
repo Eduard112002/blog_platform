@@ -6,18 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="26b1f0c7-0452-4705-9b50-afa926c19ff9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/article/article.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/article/article.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/article/article.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/article/article.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/articles/articles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/articles/articles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/articles-list/articles-list.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/articles-list/articles-list.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/articles/articles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/articles/articles.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/header/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/header/header.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/header/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/header/header.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/server/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sign-in-account/sign-in-account.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sign-in-account/sign-in-account.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/reducer/add-articles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/reducer/add-articles.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +81,8 @@
       <workItem from="1697723437975" duration="8045000" />
       <workItem from="1697792575098" duration="18947000" />
       <workItem from="1697819397236" duration="2653000" />
-      <workItem from="1697881602510" duration="19907000" />
+      <workItem from="1697881602510" duration="20232000" />
+      <workItem from="1697966136986" duration="15490000" />
     </task>
     <task id="LOCAL-00001" summary="new">
       <created>1697283615932</created>
@@ -147,7 +147,14 @@
       <option name="project" value="LOCAL" />
       <updated>1697883027742</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Промежуточный результат 1.4. (функционал создание статьи)">
+      <created>1697908881700</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1697908881700</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,6 +180,7 @@
     <MESSAGE value="Промежуточный результат 1.2. (функционал регистрации и входа в аккаунт)" />
     <MESSAGE value="Промежуточный результат 1.2. (функционал обновление профиля)" />
     <MESSAGE value="Промежуточный результат 1.3. (функционал like)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Промежуточный результат 1.3. (функционал like)" />
+    <MESSAGE value="Промежуточный результат 1.4. (функционал создание статьи)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Промежуточный результат 1.4. (функционал создание статьи)" />
   </component>
 </project>

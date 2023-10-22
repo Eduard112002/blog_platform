@@ -7,7 +7,7 @@ import * as actions from "../../actions";
 import Server from '../server';
 import { useNavigate } from "react-router-dom";
 
-const Header = ({ addUserInfo, userInfo, addLoading }) => {
+const Header = ({ addUserInfo, userInfo, addLoading, addCreateTitle, addCreateDescription, addCreateBody }) => {
     const img = userInfo?.image === 'undefined' ||  !userInfo?.image ? 'https://www.svgrepo.com/show/442075/avatar-default-symbolic.svg' : userInfo?.image;
     const server = new Server();
     const navigate = useNavigate();
@@ -17,6 +17,11 @@ const Header = ({ addUserInfo, userInfo, addLoading }) => {
         server.getArticleList();
         addLoading();
         return navigate('/');
+    }
+    const newArticle = () => {
+        addCreateTitle('');
+        addCreateDescription('');
+        addCreateBody('');
     }
     useEffect(() => {
         if (sessionStorage.getItem('token')) {
@@ -31,9 +36,9 @@ const Header = ({ addUserInfo, userInfo, addLoading }) => {
    if (userInfo?.username) {
         return (
             <div className="head">
-                <Link to="/" className="head_link"><span className="head_title">Realworld Blog</span></Link>
+                <Link to="/" className="head_link" onClick={() => server.getArticleList()}><span className="head_title">Realworld Blog</span></Link>
                 <div className="head_nav">
-                    <Link to='/new-article' className="create_article"><span>Create article</span></Link>
+                    <Link to='/new-article' className="create_article" onClick={newArticle}><span>Create article</span></Link>
                      <Link to="/profile" className="link_user">
                          <h3 className="head_user__name">{userInfo?.username}</h3>
                         <img className="head_user_icon" src={img} alt="user_icon"/>

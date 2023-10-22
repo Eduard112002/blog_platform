@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { addArticles, addArticlesError, addEmailInvalid, addUserInfo, addSignInEmail, addSignInPassword, addError,
          addUserName, addEmail, addPassword, addPasswordRepeat, addChecked, addCreateTag,
-         addCreateTitle, addCreateDescription, addCreateBody} from '../../actions';
+         addCreateTitle, addCreateDescription, addCreateBody, addArticle} from '../../actions';
 import store from '../../store';
 import { useNavigate } from "react-router-dom";
 
@@ -138,7 +138,7 @@ export default class Server extends Component {
          return this.navigate("/");
            })
    }
-   async likeArticle(token, slug, articlesList) {
+   async likeArticle(token, slug, articlesList, flag) {
        await fetch(this.urlFavorite(slug), {
            method: "POST",
            headers: {
@@ -150,9 +150,12 @@ export default class Server extends Component {
                const index = articlesList.findIndex((el) => el.slug === res.article.slug)
                const newEl = {...res.article, id:`${articlesList[index].createdAt}_${articlesList[index].author.username}`};
                this.dispatch(addArticles([...articlesList.slice(0, index), newEl, ...articlesList.slice(index + 1)]))
+               if (flag) {
+                   this.getArticle(slug, token)
+               }
            })
    }
-   async unFavoriteArticle(token, slug, articlesList) {
+   async unFavoriteArticle(token, slug, articlesList, flag) {
        await fetch(this.urlFavorite(slug), {
            method: "DELETE",
            headers: {
@@ -164,12 +167,15 @@ export default class Server extends Component {
                const index = articlesList.findIndex((el) => el.slug === res.article.slug)
                const newEl = {...res.article, id:`${articlesList[index].createdAt}_${articlesList[index].author.username}`};
                this.dispatch(addArticles([...articlesList.slice(0, index), newEl, ...articlesList.slice(index + 1)]))
+               if (flag) {
+                   this.getArticle(slug, token)
+               }
            })
     }
 
     async createArticle({token, title, description, body, tags}) {
         const bodyString = JSON.stringify({
-            "article": {"title":`${title}`,"description":`${description}`,"body": `${body}`, "tags": [...tags]}
+            "article": {"title":`${title}`,"description":`${description}`,"body": `${body}`, "tagList": tags}
         })
         await fetch('https://blog.kata.academy/api/articles', {
             method: "POST",
@@ -186,5 +192,49 @@ export default class Server extends Component {
             this.dispatch(addCreateBody(''));
             return this.navigate("/");
         })
+    }
+    async getArticle(slug, token) {
+        await fetch(`https://blog.kata.academy/api/articles/${slug}`,{
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+                Authorization: `Token ${token}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                 this.dispatch(addArticle(res.article))
+                 return this.navigate(`/articles/${slug}`);
+            })
+    }
+    async updateArticle({slug, token, title, description, body, tags}) {
+       const bodyString = JSON.stringify({
+            "article":{"title": `${title}`,"description": `${description}`,"body": `${body}`, "tagList": tags}
+        })
+        await fetch(`https://blog.kata.academy/api/articles/${slug}`,{
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+                Authorization: `Token ${token}`,
+            },
+            body: bodyString,
+        })
+            .then((res) => res.json())
+            .then(() => {
+                this.getArticle(slug)
+                return this.navigate(`/articles/${slug}`);
+            })
+    }
+    async deleteArticle(slug, token) {
+        await fetch(`https://blog.kata.academy/api/articles/${slug}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+                Authorization: `Token ${token}`,
+            },
+        }).then(() => {
+            this.getArticleList()
+            return this.navigate(`/`);
+        });
     }
 }

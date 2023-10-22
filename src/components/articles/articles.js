@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { connect } from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../../actions';
+import Markdown from 'react-markdown'
 import Server from '../server';
 
 const Articles = ({ articles, articlesList, addArticles }) => {
@@ -12,11 +13,12 @@ const Articles = ({ articles, articlesList, addArticles }) => {
     const newData = format(new Date(year, month - 1, day), 'LLLL dd, yyyy');
     const server = new Server();
     const addLike = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
         if (sessionStorage.getItem('token')) {
             articles.favorited ? server.unFavoriteArticle(sessionStorage.getItem('token'), articles.slug, articlesList) :
                 server.likeArticle(sessionStorage.getItem('token'), articles.slug, articlesList);
         }
-        e.preventDefault();
     }
     const imgError = () => {
         const articleIndex = articlesList.findIndex((el) => el.id === articles.id);
@@ -33,7 +35,7 @@ const Articles = ({ articles, articlesList, addArticles }) => {
                <button className={like} type='button' onClick={(e) => addLike(e)}>{articles.favoritesCount}</button>
            </div>
                {tag}
-               <p className="articles_text">{articles.title}</p>
+           <span className="articles_text"><Markdown>{articles.title}</Markdown></span>
        </div>
        <div className="articles_user">
            <div className="articles_user_info">

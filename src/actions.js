@@ -43,3 +43,5 @@ export const addCreateTitle = (payload) => ({type: "ADD_TITLE", title: payload})
 export const addCreateDescription = (payload) => ({type: "ADD_DESCRIPTION", description: payload});
 
 export const addCreateBody = (payload) => ({type: "ADD_BODY", body: payload});
+
+export const addArticle = (payload) => ({type: "ADD_ARTICLE", article: payload});

@@ -6,6 +6,7 @@ const defaultStateArticles= {
     eyePassword: true,
     emailInvalid: false,
     userInfo: null,
+    article: {},
 }
 
 const addArticlesReducer = (state = defaultStateArticles, action) => {
@@ -24,6 +25,8 @@ const addArticlesReducer = (state = defaultStateArticles, action) => {
             return {...state, eyePassword: action.eyePassword}
         case "LOADING":
             return {...state, loading: true}
+        case "ADD_ARTICLE":
+            return {...state, loading: false, article: action.article}
         default:
             return state;
     }

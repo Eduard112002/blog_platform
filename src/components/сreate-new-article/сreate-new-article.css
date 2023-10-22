@@ -1,0 +1,96 @@
+.create_article_form{
+    box-shadow: 0 4px 10px 6px rgb(203, 203, 203);
+    padding: 50px 30px;
+    border-radius: 6px;
+    width: 930px;
+    margin-bottom: 50px;
+}
+
+.create_article_title{
+    font-size: 20px;
+    margin-bottom: 40px;
+}
+
+.input_form_text::placeholder{
+    color: rgb(177, 177, 177);
+}
+
+.input_form_text{
+    font-family: 'Open Sans', sans-serif;
+    height: 170px;
+    padding: 15px;
+    resize: none;
+    overflow:hidden;
+    font-size: 14px;
+}
+
+.container_from_text{
+    margin-bottom: 5px;
+}
+
+.create_send{
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    color: white;
+    background-color: #1890FF;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.create_send:active{
+    box-shadow: 0 0 5px 3px #6fa6fc inset;
+}
+
+.container_from_tag{
+    margin-bottom: 20px;
+}
+
+.but_teg{
+    background-color: white;
+    width: 120px;
+    height: 43px;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.delete{
+    color: #ff000c;
+    border: 1px solid #ff000b;
+}
+
+.delete:active{
+    box-shadow: 0 0 1px 1px rgba(255, 0, 13, 0.35) inset;
+}
+
+.add{
+    color: #1890FF;
+    border: 1px solid #1890FF;
+}
+
+.add:active{
+    box-shadow: 0 0 1px 1px rgba(24, 144, 255, 0.61) inset;
+}
+
+.title_form_tag{
+    display: inline-block;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.container_tag{
+    display: flex;
+}
+
+.none{
+    cursor: default;
+}
+
+.tag{
+  width: 300px;
+    margin-right: 15px;
+}

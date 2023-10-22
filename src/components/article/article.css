@@ -54,11 +54,13 @@
 }
 
 .article_tag{
+    display: inline-block;
     padding: 3px;
     border-radius: 3px;
     border: 1px solid #a3a3a3;
     color: #a3a3a3;
     margin-right: 7px;
+    margin-bottom: 10px;
 }
 
 .article_text{
@@ -69,6 +71,7 @@
 
 .article_user{
     display: flex;
+    margin-bottom: 25px;
 }
 
 .article_user_info{
@@ -86,12 +89,14 @@
 }
 
 .article_user_info__name{
+    margin: 0;
     color: #000000;
     font-size: 18px;
-    margin: 0;
 }
 
 .article_user_info__date{
+    display: inline-block;
+    margin-bottom: 25px;
     font-size: 12px;
     color: #a3a3a3;
 }
@@ -116,3 +121,41 @@
     padding-top: 100px;
     height: 100px;
 }
+
+.article_edit{
+    display: flex;
+    justify-content: end;
+}
+
+.but_article{
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+    height: 25px;
+    width: 78px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: white;
+    padding-top: 5px;
+}
+
+.delete_article{
+    margin-right: 15px;
+    color: #ff000c;
+    border: 1px solid #ff000b;
+    padding-bottom: 25px;
+}
+
+.delete_article:active{
+    box-shadow: 0 0 1px 1px rgba(255, 0, 13, 0.35) inset;
+}
+
+.edit{
+    color: rgba(81, 213, 0, 0.88);
+    border: 1px solid rgba(88, 232, 2, 0.88);
+}
+
+.edit:active{
+    box-shadow: 0 0 1px 1px rgba(88, 232, 2, 0.88) inset;
+}
+
