@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import {BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import {BrowserRouter, Routes, Route, useNavigate} from 'react-router-dom';
 import { Provider } from 'react-redux';
-
 import store from './store';
-import Server from './components/server';
 import Header from './components/header';
 import ArticlesList from './components/articles-list';
 import Article from './components/article';
@@ -13,12 +11,13 @@ import CreateAccount from './components/сreate-account';
 import SignInAccount from './components/sign-in-account';
 import EditProfile from './components/edit-profile';
 import PrivateRouter from "./components/utils/private-router";
+import {articleList} from "./components/server/server-reducer";
 
 const App = () => {
-    const server = new Server();
     let navigate = useNavigate();
+    const { dispatch } = store;
     useEffect(() => {
-        server.getArticleList();
+        dispatch(articleList())
         return navigate("/");
     }, [])
    return <>
@@ -32,7 +31,7 @@ const App = () => {
                <Route path="/profile" element={<EditProfile />}/>
                <Route path="/new-article" element={<PrivateRouter />}/>
                <Route path="/articles/:slug/edit" element={<PrivateRouter />}/>
-               <Route path="*" element={<ArticlesList />}/>
+               <Route path="*" element={<ArticlesList/>}/>
            </Routes>
        </Provider>
      </>

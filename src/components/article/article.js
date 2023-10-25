@@ -1,16 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './article.css';
 import { format } from 'date-fns';
-import { connect } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert, Space, Spin, Popconfirm, Button } from 'antd';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../actions';
 import Markdown from 'react-markdown';
-import Server from '../server';
+import {deleteArticle, likeArticle, unFavoriteArticle} from "../server/server-reducer";
 
-const Article = ({ article, loading, error, addArticle, addCreateTitle, addCreateDescription, addCreateBody, articlesList }) => {
-    const server = new Server();
+const Article = ({ article, loading, error, addArticle, addCreateTitle, addCreateDescription, addCreateBody,
+                     articlesList, ok, changeOk, articleOk, changeArticleOk, addLoading, addPage }) => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { id } = useParams();
     const addEditText = () => {
         addCreateTitle(article.title)
@@ -18,8 +20,20 @@ const Article = ({ article, loading, error, addArticle, addCreateTitle, addCreat
         addCreateBody(article.body)
     }
     const confirmYes = () => {
-        server.deleteArticle(id, sessionStorage.getItem('token'))
+        const token = sessionStorage.getItem('token');
+        dispatch(deleteArticle({id, token}));
+        addPage(1);
     };
+    useEffect(() => {
+        if (ok) {
+            changeOk(false);
+            navigate('/');
+        }
+        if (articleOk) {
+           changeArticleOk(false);
+            navigate(`/articles/${id}`);
+        }
+    }, [ok, articleOk, article]);
     const edit = article?.author?.username === sessionStorage.getItem("username") ? (<div className="article_edit">
         <Popconfirm
             title="Delete the article"
@@ -62,10 +76,13 @@ const Article = ({ article, loading, error, addArticle, addCreateTitle, addCreat
     }
     const addLike = () => {
         const token = sessionStorage.getItem('token')
+        const flag = true;
+        const slug = article.slug;
         if (token) {
-            article.favorited ? server.unFavoriteArticle(token, article.slug, articlesList, true) :
-                server.likeArticle(token, article.slug, articlesList, true);
+            article.favorited ? dispatch(unFavoriteArticle({token, slug, articlesList, flag})) :
+                dispatch(likeArticle({token, slug, articlesList, flag}));
         }
+        dispatch(addLoading(loading));
     }
     const like = article.favorited ? 'articles_like like' : 'articles_like no_like';
     const tag = tegList(article.tagList);
@@ -109,11 +126,14 @@ const tegList = (arr) => {
 
 const mapStateToProps = (state) => {
     const articles = state.addArticlesReducer;
+    const newAccount = state.addNewAccountReducer;
     return {
         loading: articles.loading,
         error: articles.error,
         article: articles.article,
         articlesList: articles.articlesList,
+        ok: newAccount.ok,
+        articleOk: newAccount.articleOk,
     };
 };
 

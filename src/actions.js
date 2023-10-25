@@ -20,6 +20,10 @@ export const addTypePassword = (payload) => ({type: "ADD_TYPE_PASSWORD", typePas
 
 export const addTypePasswordRepeat = (payload) => ({type: "ADD_TYPE_PASSWORD_REPEAT", typePasswordRepeat: payload});
 
+export const changeOk = (payload) => ({type: "CHANGE_OK", ok: payload});
+
+export const changeArticleOk = (payload) => ({type: "CHANGE_ARTICLE_OK", articleOk: payload});
+
 export const addChecked = (payload) => ({type: "ADD_CHECKED", checked: payload});
 
 export const addSignInEmail = (payload) => ({type: "ADD_SIGN_IN_EMAIL", email: payload});
@@ -34,7 +38,7 @@ export const addEyePassword = (payload) => ({type: "EYE_PASSWORD", eyePassword: 
 
 export const addError = (payload) => ({type: "ADD_ERROR", error: payload});
 
-export const addLoading = () => ({type: 'LOADING'});
+export const addLoading = (payload) => ({type: 'LOADING', loading: payload});
 
 export const addCreateTag = (payload) => ({type: "ADD_TAG", tag: payload});
 
@@ -45,3 +49,4 @@ export const addCreateDescription = (payload) => ({type: "ADD_DESCRIPTION", desc
 export const addCreateBody = (payload) => ({type: "ADD_BODY", body: payload});
 
 export const addArticle = (payload) => ({type: "ADD_ARTICLE", article: payload});
+

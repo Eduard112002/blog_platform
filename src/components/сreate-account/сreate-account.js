@@ -1,19 +1,21 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './сreate-account.css';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import * as actions from '../../actions';
-import Server from '../server';
+import { registerNewUser } from '../server/server-reducer';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from "react-router-dom";
 
 const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName, addEmail, addPassword, addPasswordRepeat,
-                           addTypePassword, addTypePasswordRepeat, typePassword, typePasswordRepeat, addChecked, checked, error}) => {
-    const server = new Server();
+                           addTypePassword, addTypePasswordRepeat, typePassword, typePasswordRepeat, addChecked, checked, error, ok, changeOk}) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const errorInvalid = error ? <span className="invalid_error">{error}</span> : null;
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
-            userName: '',
+            userName: ' ',
             email: '',
             password: '',
             passwordRepeat: '',
@@ -21,9 +23,15 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName,
         }
     });
     const logIn = (data) => {
-         const { userName, email, password} = data;
-         server.registerNewUser(userName, email, password);
+        dispatch(registerNewUser(data));
     }
+
+    useEffect(() => {
+        if (ok) {
+            changeOk(false);
+            navigate('/');
+        }
+    }, [ok])
     return <div className="create">
         <form className="create_form" onSubmit={(e) => e.preventDefault()}>
             <center className="create_title">Create new account</center>
@@ -176,6 +184,7 @@ const mapStateToProps = (state) => {
         typePasswordRepeat: newAccount.typePasswordRepeat,
         checked: newAccount.checked,
         error: singIn.error,
+        ok: newAccount.ok,
     }
 }
 

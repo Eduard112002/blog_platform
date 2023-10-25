@@ -1,11 +1,13 @@
 const defaultStateNewAccount = {
-    userName: '',
+    userName: ' ',
     email: '',
     password: '',
     passwordRepeat: '',
     typePassword: true,
     typePasswordRepeat: true,
     checked: false,
+    ok: false,
+    articleOk: false,
 }
 
 const addNewAccountReducer = (state = defaultStateNewAccount, action) => {
@@ -24,6 +26,10 @@ const addNewAccountReducer = (state = defaultStateNewAccount, action) => {
             return {...state, typePasswordRepeat: action.typePasswordRepeat};
         case 'ADD_CHECKED':
             return {...state, checked: action.checked};
+        case 'CHANGE_OK':
+            return {...state, ok: action.ok};
+        case 'CHANGE_ARTICLE_OK':
+            return {...state, articleOk: action.articleOk};
         default:
             return state;
     }

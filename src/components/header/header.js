@@ -1,27 +1,31 @@
 import React, {useEffect} from 'react';
 import './header.css';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as actions from "../../actions";
-import Server from '../server';
 import { useNavigate } from "react-router-dom";
+import { articleList } from '../server/server-reducer';
 
-const Header = ({ addUserInfo, userInfo, addLoading, addCreateTitle, addCreateDescription, addCreateBody }) => {
+const Header = ({ addUserInfo, userInfo, addLoading, addCreateTitle, addCreateDescription, addCreateBody, addPage }) => {
     const img = userInfo?.image === 'undefined' ||  !userInfo?.image ? 'https://www.svgrepo.com/show/442075/avatar-default-symbolic.svg' : userInfo?.image;
-    const server = new Server();
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     const exit = () => {
         sessionStorage.clear();
         addUserInfo({});
-        server.getArticleList();
-        addLoading();
-        return navigate('/');
+        navigate('/');
+        addLoading(true);
+        dispatch(articleList());
     }
     const newArticle = () => {
         addCreateTitle('');
         addCreateDescription('');
         addCreateBody('');
+    }
+    const home = () => {
+        dispatch(articleList())
+        addPage(1)
     }
     useEffect(() => {
         if (sessionStorage.getItem('token')) {
@@ -36,7 +40,7 @@ const Header = ({ addUserInfo, userInfo, addLoading, addCreateTitle, addCreateDe
    if (userInfo?.username) {
         return (
             <div className="head">
-                <Link to="/" className="head_link" onClick={() => server.getArticleList()}><span className="head_title">Realworld Blog</span></Link>
+                <Link to="/" className="head_link" onClick={home}><span className="head_title">Realworld Blog</span></Link>
                 <div className="head_nav">
                     <Link to='/new-article' className="create_article" onClick={newArticle}><span>Create article</span></Link>
                      <Link to="/profile" className="link_user">

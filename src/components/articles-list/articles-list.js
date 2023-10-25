@@ -1,14 +1,11 @@
 import './articles-list.css';
 import Articles from '../articles';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PaginatioArticles from '../pagination';
 import { Space, Spin, Alert } from 'antd';
-import Server from '../server';
 
 const ArticlesList = ({ articlesList, loading, error }) => {
-    const server = new Server();
    if (loading) {
        return (
            <Space direction="vertical" style={{ width: '100%' }} className="spin">
@@ -33,7 +30,7 @@ const ArticlesList = ({ articlesList, loading, error }) => {
         )
     }
     const articleEl = articlesList.map((el) => {
-        return <Link className="link" key={el.id} onClick={() => server.getArticle(el.slug, sessionStorage.getItem('token'))}><Articles articles={el}/></Link>
+        return <Articles key={el.id} articles={el}/>
     });
     return <div className="articles_list">
         {articleEl}

@@ -3,14 +3,16 @@ import './сreate-new-article.css';
 import Tag from './tag';
 import { useForm } from 'react-hook-form';
 import { bindActionCreators } from "redux";
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import * as actions from "../../actions";
-import Server from '../server';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createArticle, updateArticle } from "../server/server-reducer";
 
-const CreateNewArticle = ({ title, description, body, tag, addCreateTag, addCreateTitle, addCreateDescription, addCreateBody }) => {
+const CreateNewArticle = ({ title, description, body, tag, addCreateTag, addCreateTitle,
+                              addCreateDescription, addCreateBody, ok, changeOk, articleOk, changeArticleOk }) => {
     const { slug } = useParams();
-    const server = new Server();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     useEffect(() => {
         return () => {
             addCreateTitle('');
@@ -47,12 +49,22 @@ const CreateNewArticle = ({ title, description, body, tag, addCreateTag, addCrea
         })
         let result = {...data, tags: tags};
         if (!slug) {
-            server.createArticle(result);
+            dispatch(createArticle(result));
         } else {
             result = {...result, slug}
-            server.updateArticle(result);
+            dispatch(updateArticle(result));
         }
     }
+    useEffect(() => {
+        if (ok) {
+            changeOk(false);
+            navigate('/');
+        }
+        if (articleOk) {
+            changeArticleOk(false);
+            navigate(`/articles/${slug}`);
+        }
+    }, [ok, articleOk]);
     return <div className="create">
         <form className="create_article_form" onSubmit={(e) => e.preventDefault()}>
             <center className="create_article_title">Create new article</center>
@@ -123,11 +135,14 @@ const CreateNewArticle = ({ title, description, body, tag, addCreateTag, addCrea
 
 const mapStateToProps = (state) => {
     const create = state.createArticleReducer;
+    const newAccount = state.addNewAccountReducer;
     return {
         title: create.title,
         description: create.description,
         body: create.body,
         tag: create.tag,
+        ok: newAccount.ok,
+        articleOk: newAccount.articleOk,
     }
 }
 

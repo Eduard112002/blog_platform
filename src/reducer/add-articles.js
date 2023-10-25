@@ -24,7 +24,7 @@ const addArticlesReducer = (state = defaultStateArticles, action) => {
         case "EYE_PASSWORD":
             return {...state, eyePassword: action.eyePassword}
         case "LOADING":
-            return {...state, loading: true}
+            return {...state, loading: action.loading}
         case "ADD_ARTICLE":
             return {...state, loading: false, article: action.article}
         default:

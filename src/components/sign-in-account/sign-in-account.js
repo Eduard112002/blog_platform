@@ -1,14 +1,15 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './sign-in-account.css';
-import Server from '../server';
-import {bindActionCreators} from "redux";
-import * as actions from "../../actions";
-import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from '../../actions';
+import { connect, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import {userSignIn} from '../server/server-reducer';
 
-const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, addEyePassword, eyePassword, emailInvalid, addLoading }) => {
-    const server = new Server();
+const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, addEyePassword, eyePassword, emailInvalid, ok, changeOk }) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const error = emailInvalid ? <span className="title_error">invalid email or password</span> : null;
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -17,11 +18,15 @@ const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, add
         }
     });
     const signIn = (data) => {
-        const { email, password } = data;
-            server.userSignIn(email, password);
-            addEyePassword(true);
-            addLoading()
+        dispatch(userSignIn(data));
+        addEyePassword(true);
     }
+    useEffect(() => {
+        if (ok) {
+            changeOk(false);
+            navigate('/');
+        }
+    }, [ok]);
     return <div className="sign-in">
         <form className="sign-in_form" onSubmit={(e) => e.preventDefault()}>
             <center className="sign-in_title">Sign In</center>
@@ -88,6 +93,7 @@ const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, add
 
 const mapStateToProps = (state) => {
     const signIn = state.addUserSignInReducer;
+    const newAccount = state.addNewAccountReducer;
     const articles = state.addArticlesReducer;
     return {
         email: signIn.email,
@@ -96,6 +102,7 @@ const mapStateToProps = (state) => {
         userInfo: articles.userInfo,
         emailInvalid: articles.emailInvalid,
         eyePassword: articles.eyePassword,
+        ok: newAccount.ok,
     }
 }
 

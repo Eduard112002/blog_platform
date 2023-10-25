@@ -1,23 +1,26 @@
 import React from 'react';
 import './articles.css';
 import { format } from 'date-fns';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import * as actions from '../../actions';
 import Markdown from 'react-markdown'
-import Server from '../server';
+import {getArticle, likeArticle, unFavoriteArticle} from "../server/server-reducer";
 
-const Articles = ({ articles, articlesList, addArticles }) => {
+const Articles = ({ articles, articlesList, addArticles, addLoading }) => {
     const tag = tegList(articles.tagList);
     const [year, month, day] = articles.createdAt.slice(0, 10).split('-');
     const newData = format(new Date(year, month - 1, day), 'LLLL dd, yyyy');
-    const server = new Server();
+    const dispatch = useDispatch();
+    const slug = articles.slug;
     const addLike = (e) => {
         e.stopPropagation();
         e.preventDefault();
-        if (sessionStorage.getItem('token')) {
-            articles.favorited ? server.unFavoriteArticle(sessionStorage.getItem('token'), articles.slug, articlesList) :
-                server.likeArticle(sessionStorage.getItem('token'), articles.slug, articlesList);
+        const token = sessionStorage.getItem('token');
+        if (token) {
+            articles.favorited ? dispatch(unFavoriteArticle({token, slug, articlesList})) :
+                dispatch(likeArticle({token, slug, articlesList}));
         }
     }
     const imgError = () => {
@@ -27,24 +30,31 @@ const Articles = ({ articles, articlesList, addArticles }) => {
         addArticles([...articlesList.slice(0, articleIndex), newEl, ...articlesList.slice(articleIndex + 1)])
         console.clear();
     }
+    const toGetArticle = (slug, token) => {
+        addLoading(true);
+        dispatch(getArticle({slug, token}))
+    }
+    const token = sessionStorage.getItem('token');
     const like = articles.favorited ? 'articles_like like' : 'articles_like no_like';
-   return <div className="articles">
-       <div className="articles_content">
-           <div>
-               <span className="articles_title">{articles.slug}</span>
-               <button className={like} type='button' onClick={(e) => addLike(e)}>{articles.favoritesCount}</button>
+   return <Link className="link" to={`/articles/${slug}`} onClick={() => toGetArticle(slug, token)}>
+           <div className="articles">
+           <div className="articles_content">
+               <div>
+                   <span className="articles_title">{articles.slug}</span>
+                   <button className={like} type='button' onClick={(e) => addLike(e)}>{articles.favoritesCount}</button>
+               </div>
+                   {tag}
+               <span className="articles_text"><Markdown>{articles.title}</Markdown></span>
            </div>
-               {tag}
-           <span className="articles_text"><Markdown>{articles.title}</Markdown></span>
-       </div>
-       <div className="articles_user">
-           <div className="articles_user_info">
-               <h4 className="articles_user_info__name">{articles.author.username}</h4>
-               <span className="articles_user_info__date">{newData}</span>
+           <div className="articles_user">
+               <div className="articles_user_info">
+                   <h4 className="articles_user_info__name">{articles.author.username}</h4>
+                   <span className="articles_user_info__date">{newData}</span>
+               </div>
+               <img className="articles_user_info__icon" src={articles.author.image} onError={imgError} alt="user_icon"/>
            </div>
-           <img className="articles_user_info__icon" src={articles.author.image} onError={imgError} alt="user_icon"/>
        </div>
-   </div>
+   </Link>
 }
 
 const tegList = (arr) => {

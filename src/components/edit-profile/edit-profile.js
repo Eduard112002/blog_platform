@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './edit-profile.css';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import * as actions from '../../actions';
-import Server from '../server';
 import { useForm } from "react-hook-form";
+import { updateCurrentUser } from "../server/server-reducer";
+import { useNavigate } from "react-router-dom";
 
-const EditProfile = ({ userName, email, password, addUserName, addEmail, addPassword, addTypePassword, typePassword, userInfo, error }) => {
-    const server = new Server();
+const EditProfile = ({ userName, email, password, addUserName, addEmail, addPassword, addTypePassword,
+                         typePassword, userInfo, error, ok, changeOk, addPage }) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const errorInvalid = error ? <span className="title_error">{error}</span> : null;
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -18,10 +21,16 @@ const EditProfile = ({ userName, email, password, addUserName, addEmail, addPass
         }
     });
     const save = (data) => {
-        const { email, userName, newPassword,  avatarImage} = data;
         const token = sessionStorage.getItem('token');
-        server.updateCurrentUser(email, userName, newPassword, avatarImage, token, userInfo)
+        dispatch(updateCurrentUser({...data, token, userInfo}));
     }
+    useEffect(() => {
+        if (ok) {
+            changeOk(false);
+            navigate('/');
+            addPage(1);
+        }
+    }, [ok]);
     return <div className="create">
         <form className="create_form create_edit" onSubmit={(e) => e.preventDefault()}>
             <center className="create_title">Create new account</center>
@@ -135,6 +144,7 @@ const mapStateToProps = (state) => {
         typePasswordRepeat: newAccount.typePasswordRepeat,
         userInfo: articles.userInfo,
         error: singIn.error,
+        ok: newAccount.ok,
     }
 }
 

@@ -1,14 +1,13 @@
 import { Pagination } from 'antd';
-import Server from '../server';
 import { addPage } from '../../actions';
 import { connect } from 'react-redux';
 import store from '../../store';
+import { articleList } from "../server/server-reducer";
 
 const PaginatioArticles = ({ page }) => {
-    const server = new Server();
     const { dispatch } = store;
     const onChange = (page) => {
-        server.getArticleList(page);
+        dispatch(articleList(page));
         dispatch(addPage(page));
     };
     return (
