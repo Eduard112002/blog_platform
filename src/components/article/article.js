@@ -7,20 +7,20 @@ import { Alert, Space, Spin, Popconfirm, Button } from 'antd';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../actions';
 import Markdown from 'react-markdown';
-import {deleteArticle, likeArticle, unFavoriteArticle} from "../server/server-reducer";
+import {deleteArticle, getArticle, likeArticle, unFavoriteArticle} from "../server/server-reducer";
 
 const Article = ({ article, loading, error, addArticle, addCreateTitle, addCreateDescription, addCreateBody,
                      articlesList, ok, changeOk, articleOk, changeArticleOk, addLoading, addPage }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { id } = useParams();
+    const token = sessionStorage.getItem('token');
     const addEditText = () => {
         addCreateTitle(article.title)
         addCreateDescription(article.description)
         addCreateBody(article.body)
     }
     const confirmYes = () => {
-        const token = sessionStorage.getItem('token');
         dispatch(deleteArticle({id, token}));
         addPage(1);
     };
@@ -34,6 +34,10 @@ const Article = ({ article, loading, error, addArticle, addCreateTitle, addCreat
             navigate(`/articles/${id}`);
         }
     }, [ok, articleOk, article]);
+    useEffect(() => {
+        const slug = id;
+        dispatch(getArticle({slug, token}))
+    }, [])
     const edit = article?.author?.username === sessionStorage.getItem("username") ? (<div className="article_edit">
         <Popconfirm
             title="Delete the article"

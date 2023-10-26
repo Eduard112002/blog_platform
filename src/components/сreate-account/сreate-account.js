@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './сreate-account.css';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
@@ -12,6 +12,7 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName,
                            addTypePassword, addTypePasswordRepeat, typePassword, typePasswordRepeat, addChecked, checked, error, ok, changeOk}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [disabled, serDisabled] = useState(false);
     const errorInvalid = error ? <span className="invalid_error">{error}</span> : null;
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -23,6 +24,7 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName,
         }
     });
     const logIn = (data) => {
+        serDisabled(true)
         dispatch(registerNewUser(data));
     }
 
@@ -162,7 +164,7 @@ const CreateAccount = ({ userName, email, password, passwordRepeat, addUserName,
                 </label>
             </div>
             { errorInvalid }
-            <button className="create_log-in" onClick={handleSubmit((data) => logIn(data))}>Create</button>
+            <button disabled={disabled} className="create_log-in" onClick={handleSubmit((data) => logIn(data))}>Create</button>
             <div>
                 <center className="login-account">Already have an account?<Link to='/singIn' className="login-account_link"> Sign In.</Link></center>
             </div>

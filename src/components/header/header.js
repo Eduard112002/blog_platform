@@ -7,7 +7,7 @@ import * as actions from "../../actions";
 import { useNavigate } from "react-router-dom";
 import { articleList } from '../server/server-reducer';
 
-const Header = ({ addUserInfo, userInfo, addLoading, addCreateTitle, addCreateDescription, addCreateBody, addPage }) => {
+const Header = ({ addUserInfo, userInfo, addLoading, addCreateTitle, addCreateDescription, addCreateBody, page }) => {
     const img = userInfo?.image === 'undefined' ||  !userInfo?.image ? 'https://www.svgrepo.com/show/442075/avatar-default-symbolic.svg' : userInfo?.image;
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -24,8 +24,7 @@ const Header = ({ addUserInfo, userInfo, addLoading, addCreateTitle, addCreateDe
         addCreateBody('');
     }
     const home = () => {
-        dispatch(articleList())
-        addPage(1)
+        dispatch(articleList(page))
     }
     useEffect(() => {
         if (sessionStorage.getItem('token')) {
@@ -68,6 +67,7 @@ const mapStateToProps = (state) => {
     const articles = state.addArticlesReducer;
     return {
         userInfo: articles.userInfo,
+        page: articles.page,
     }
 }
 

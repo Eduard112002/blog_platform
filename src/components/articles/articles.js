@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import * as actions from '../../actions';
 import Markdown from 'react-markdown'
-import {getArticle, likeArticle, unFavoriteArticle} from "../server/server-reducer";
+import { likeArticle, unFavoriteArticle} from "../server/server-reducer";
 
 const Articles = ({ articles, articlesList, addArticles, addLoading }) => {
     const tag = tegList(articles.tagList);
@@ -30,13 +30,8 @@ const Articles = ({ articles, articlesList, addArticles, addLoading }) => {
         addArticles([...articlesList.slice(0, articleIndex), newEl, ...articlesList.slice(articleIndex + 1)])
         console.clear();
     }
-    const toGetArticle = (slug, token) => {
-        addLoading(true);
-        dispatch(getArticle({slug, token}))
-    }
-    const token = sessionStorage.getItem('token');
     const like = articles.favorited ? 'articles_like like' : 'articles_like no_like';
-   return <Link className="link" to={`/articles/${slug}`} onClick={() => toGetArticle(slug, token)}>
+   return <Link className="link" to={`/articles/${slug}`} onClick={() => addLoading(true)}>
            <div className="articles">
            <div className="articles_content">
                <div>

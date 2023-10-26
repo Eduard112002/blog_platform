@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import {BrowserRouter, Routes, Route, useNavigate} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 import Header from './components/header';
@@ -11,15 +11,8 @@ import CreateAccount from './components/сreate-account';
 import SignInAccount from './components/sign-in-account';
 import EditProfile from './components/edit-profile';
 import PrivateRouter from "./components/utils/private-router";
-import {articleList} from "./components/server/server-reducer";
 
 const App = () => {
-    let navigate = useNavigate();
-    const { dispatch } = store;
-    useEffect(() => {
-        dispatch(articleList())
-        return navigate("/");
-    }, [])
    return <>
        <Provider store={store}>
            <Header />

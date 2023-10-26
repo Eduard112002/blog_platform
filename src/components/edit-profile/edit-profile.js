@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import './edit-profile.css';
 import { bindActionCreators } from 'redux';
 import { connect, useDispatch } from 'react-redux';
@@ -7,22 +7,29 @@ import { useForm } from "react-hook-form";
 import { updateCurrentUser } from "../server/server-reducer";
 import { useNavigate } from "react-router-dom";
 
-const EditProfile = ({ userName, email, password, addUserName, addEmail, addPassword, addTypePassword,
+const EditProfile = ({ email, password, addUserName, addEmail, addPassword, addTypePassword,
                          typePassword, userInfo, error, ok, changeOk, addPage }) => {
+    const [disabled, serDisabled] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const errorInvalid = error ? <span className="title_error">{error}</span> : null;
+    const userInfoOld = {
+        userName: sessionStorage.getItem('username'),
+        email: sessionStorage.getItem('email'),
+        image: sessionStorage.getItem('image'),
+    };
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
-            userName: '',
-            email: '',
+            userName: `${userInfoOld.userName}`,
+            email: `${userInfoOld.email}`,
             newPassword: '',
-            avatarImage: '',
+            avatarImage: `${userInfoOld.image}`,
         }
     });
     const save = (data) => {
+        serDisabled(true);
         const token = sessionStorage.getItem('token');
-        dispatch(updateCurrentUser({...data, token, userInfo}));
+       dispatch(updateCurrentUser({...data, token, userInfo}));
     }
     useEffect(() => {
         if (ok) {
@@ -48,9 +55,7 @@ const EditProfile = ({ userName, email, password, addUserName, addEmail, addPass
                     }})}
                     type="text"
                     placeholder="Username"
-                    value={userName}
                     onChange={(e) => addUserName(e.target.value)}
-                    autoFocus
                     required/>
                 <span className="title_error">{errors.userName?.message}</span>
             </div>
@@ -96,6 +101,7 @@ const EditProfile = ({ userName, email, password, addUserName, addEmail, addPass
                         value: password,
                     })}
                     required
+                    autoFocus
                 />
                 <button
                     className="eye_password"
@@ -127,7 +133,7 @@ const EditProfile = ({ userName, email, password, addUserName, addEmail, addPass
                 <span className="title_error">{errors.avatarImage?.message}</span>
                 { errorInvalid }
             </div>
-            <button className="create_log-in" onSubmit={(e) => e.defaultPrevented()} onClick={handleSubmit((data) => save(data))}>Create</button>
+            <button disabled={disabled} className="create_log-in" onSubmit={(e) => e.defaultPrevented()} onClick={handleSubmit((data) => save(data))}>Create</button>
         </form>
     </div>
 };

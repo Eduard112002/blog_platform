@@ -17,8 +17,9 @@ export const articleList = createAsyncThunk(
       'articles/articleList',
     async function(page) {
         const body = token ? {headers: {"Content-Type": "application/json;charset=utf-8", Authorization: `Token ${sessionStorage.getItem('token')}`}} : null;
-        let offset = 0;
-        switch (page) {
+        let offset;
+        const pageList = page ? page : store.getState().addArticlesReducer.page;
+        switch (pageList) {
             case 1:
                 offset = 0
                 break;
@@ -34,6 +35,8 @@ export const articleList = createAsyncThunk(
             case 5:
                 offset = 80
                 break;
+            default:
+                offset = 0
         }
         const result = await fetch(`https://blog.kata.academy/api/articles?offset=${offset}`, body);
         if (!result.ok) {
@@ -100,12 +103,14 @@ export const articleList = createAsyncThunk(
              addUserInfo(res.user);
              addArticlesError(false);
              addEmailInvalid(false);
+             console.log(res);
              if (token) {
                  sessionStorage.removeItem('token');
                  sessionStorage.setItem('token', res.user.token);
              } else {
                  sessionStorage.setItem('token', res.user.token);
              }
+             sessionStorage.setItem('email', res.user.email);
              sessionStorage.setItem('image', res.user.image);
              sessionStorage.setItem('username', res.user.username);
              addSignInEmail('');
@@ -270,30 +275,3 @@ export const articleList = createAsyncThunk(
              })
      }
  );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

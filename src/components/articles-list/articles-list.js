@@ -1,11 +1,20 @@
+import React, { useEffect } from 'react';
 import './articles-list.css';
 import Articles from '../articles';
-import React from 'react';
 import { connect } from 'react-redux';
 import PaginatioArticles from '../pagination';
 import { Space, Spin, Alert } from 'antd';
+import { useNavigate } from "react-router-dom";
+import store from "../../store";
+import { articleList } from "../server/server-reducer";
 
 const ArticlesList = ({ articlesList, loading, error }) => {
+    let navigate = useNavigate();
+    const { dispatch } = store;
+    useEffect(() => {
+        dispatch(articleList())
+        return navigate("/");
+    }, []);
    if (loading) {
        return (
            <Space direction="vertical" style={{ width: '100%' }} className="spin">
