@@ -1,2 +1,2 @@
 # blog_platform
-https://blog-platform-fpj55uvb0-barelis-mailru.vercel.app/
+https://blog-platform-1vpzkww5x-barelis-mailru.vercel.app/singIn
