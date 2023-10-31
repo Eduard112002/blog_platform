@@ -103,7 +103,6 @@ export const articleList = createAsyncThunk(
              addUserInfo(res.user);
              addArticlesError(false);
              addEmailInvalid(false);
-             console.log(res);
              if (token) {
                  sessionStorage.removeItem('token');
                  sessionStorage.setItem('token', res.user.token);

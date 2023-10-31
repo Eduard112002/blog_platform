@@ -16,7 +16,7 @@ const EditProfile = ({ email, password, addUserName, addEmail, addPassword, addT
     const userInfoOld = {
         userName: sessionStorage.getItem('username'),
         email: sessionStorage.getItem('email'),
-        image: sessionStorage.getItem('image'),
+        image: sessionStorage.getItem('image') === 'undefined' ? '' : sessionStorage.getItem('image'),
     };
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {

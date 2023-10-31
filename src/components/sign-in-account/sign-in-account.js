@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './sign-in-account.css';
 import { bindActionCreators } from 'redux';
@@ -10,6 +10,7 @@ import {userSignIn} from '../server/server-reducer';
 const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, addEyePassword, eyePassword, emailInvalid, ok, changeOk }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [disabled, serDisabled] = useState(false);
     const error = emailInvalid ? <span className="title_error">invalid email or password</span> : null;
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -18,6 +19,7 @@ const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, add
         }
     });
     const signIn = (data) => {
+        serDisabled(true);
         dispatch(userSignIn(data));
         addEyePassword(true);
     }
@@ -26,7 +28,10 @@ const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, add
             changeOk(false);
             navigate('/');
         }
-    }, [ok]);
+        if (email.length || password.length) {
+            serDisabled(false);
+        }
+    }, [ok, email, password]);
     return <div className="sign-in">
         <form className="sign-in_form" onSubmit={(e) => e.preventDefault()}>
             <center className="sign-in_title">Sign In</center>
@@ -78,6 +83,7 @@ const SignInAccount = ({ email, password, addSignInEmail, addSignInPassword, add
             </div>
             {error}
                 <button
+                    disabled={disabled}
                     className="sign-in_but"
                     onClick={handleSubmit((data) => signIn(data))}
                     style={error ? {marginTop: '20px'} : null}
